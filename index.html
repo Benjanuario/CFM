@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CFM Atualizações</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     :root {
       --cfm-blue: #0d47a1;
@@ -14,6 +15,11 @@
       --text-light: #555;
       --border: #ddd;
       --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --success: #2e7d32;
+      --warning: #f57c00;
+      --danger: #c62828;
+      --whatsapp-green: #25d366;
+      --whatsapp-light: #dcf8c6;
     }
 
     * {
@@ -30,6 +36,76 @@
       line-height: 1.5;
     }
 
+    /* ANIMAÇÕES */
+    @keyframes slideDown {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes fadeInMessage {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideInLeft {
+      from { transform: translateX(-50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translate(-50%, 10px); }
+      20% { opacity: 1; transform: translate(-50%, 0); }
+      80% { opacity: 1; transform: translate(-50%, 0); }
+      100% { opacity: 0; transform: translate(-50%, -10px); }
+    }
+
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(13, 71, 161, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(13, 71, 161, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(13, 71, 161, 0); }
+    }
+
+    @keyframes slideInDown {
+      from { transform: translate(-50%, -20px); opacity: 0; }
+      to { transform: translate(-50%, 0); opacity: 1; }
+    }
+
     /* HEADER */
     header {
       background: var(--cfm-blue);
@@ -40,6 +116,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      animation: slideDown 0.5s ease;
     }
 
     .title {
@@ -47,6 +124,18 @@
       font-weight: 500;
       text-align: center;
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .last-update {
+      font-size: 0.7rem;
+      opacity: 0.8;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .hamburger {
@@ -56,6 +145,57 @@
       font-size: 1.5rem;
       cursor: pointer;
       padding: 4px;
+      transition: transform 0.3s;
+      z-index: 10;
+    }
+
+    .hamburger:hover {
+      transform: scale(1.1);
+    }
+
+    .refresh-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: all 0.3s;
+      z-index: 10;
+    }
+
+    .refresh-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: rotate(180deg);
+    }
+
+    .refresh-btn.spinning {
+      animation: spin 1s linear infinite;
+    }
+
+    /* NOTIFICAÇÃO DE NOVAS ATUALIZAÇÕES */
+    #new-update-notification {
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #0d47a1, #1565c0);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);
+      z-index: 1001;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      animation: slideInDown 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 500;
+    }
+
+    .pulse {
+      animation: pulseRing 2s infinite;
     }
 
     /* MENU HAMBÚRGUER */
@@ -65,10 +205,10 @@
       right: -300px;
       width: 260px;
       height: 100vh;
-       background: white;
+      background: white;
       box-shadow: -2px 0 10px rgba(0,0,0,0.1);
       z-index: 1000;
-      transition: right 0.3s ease;
+      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       padding-top: 60px;
     }
 
@@ -81,18 +221,28 @@
       border-bottom: 1px solid var(--border);
       font-weight: 500;
       color: var(--cfm-blue);
+      animation: fadeIn 0.3s ease;
     }
 
     .menu-item {
       padding: 14px 20px;
       border-bottom: 1px solid var(--border);
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.3s ease;
       color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .menu-item:hover {
       background: var(--cfm-light);
+      padding-left: 25px;
+    }
+
+    .menu-item i {
+      width: 20px;
+      text-align: center;
     }
 
     .overlay {
@@ -104,6 +254,7 @@
       background: rgba(0,0,0,0.4);
       z-index: 999;
       display: none;
+      animation: fadeIn 0.3s;
     }
 
     .overlay.active {
@@ -113,14 +264,7 @@
     /* CONTEÚDO PRINCIPAL */
     .container {
       padding: 20px;
-    }
-
-    .section-title {
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: var(--cfm-blue);
-      text-align: center;
+      animation: fadeInUp 0.5s ease;
     }
 
     .update-card {
@@ -128,8 +272,23 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       box-shadow: var(--shadow);
+      animation: slideInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: transform 0.2s;
+      position: relative;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+
+    .update-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .update-card.new {
+      border-left: 4px solid var(--whatsapp-green);
+      background: linear-gradient(to right, rgba(37, 211, 102, 0.05), white);
     }
 
     .original-message {
@@ -145,7 +304,13 @@
       color: var(--text-light);
       display: flex;
       justify-content: space-between;
+      align-items: center;
       margin-top: 8px;
+    }
+
+    .admin-name {
+      font-weight: 600;
+      color: var(--cfm-blue);
     }
 
     .waiting {
@@ -153,6 +318,29 @@
       color: var(--text-light);
       font-style: italic;
       padding: 30px 0;
+      animation: pulse 2s infinite;
+    }
+
+    /* LOADER PARA ATUALIZAÇÕES */
+    .loader-container {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .loader-container.visible {
+      opacity: 1;
+    }
+
+    .loader {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--cfm-light);
+      border-top: 4px solid var(--cfm-blue);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
     }
 
     /* BOTÃO DE CHAT */
@@ -162,7 +350,7 @@
       left: 20px;
       width: 60px;
       height: 60px;
-      background: var(--cfm-blue);
+      background: var(--whatsapp-green);
       color: white;
       border: none;
       border-radius: 50%;
@@ -173,14 +361,72 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.2s;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: float 3s ease-in-out infinite;
     }
 
     .chat-btn:hover {
-      transform: scale(1.05);
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
     }
 
-    /* TELA DE CHAT (oculta por padrão) */
+    .chat-btn .badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.7rem;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* COPY CONFIRMATION */
+    .copy-confirmation {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--success);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 50px;
+      box-shadow: var(--shadow);
+      z-index: 1200;
+      animation: fadeInOut 2s ease;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* STATS BADGE */
+    .stats-badge {
+      position: fixed;
+      bottom: 90px;
+      left: 30px;
+      background: white;
+      border-radius: 50px;
+      box-shadow: var(--shadow);
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      color: var(--text-light);
+      z-index: 890;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: slideInLeft 0.5s ease;
+    }
+
+    .stats-badge i {
+      color: var(--cfm-blue);
+    }
+
+    /* TELA DE CHAT - ESTILO WHATSAPP */
     .chat-screen {
       display: none;
       position: fixed;
@@ -188,9 +434,10 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: white;
+      background: #ece5dd;
       z-index: 1100;
       flex-direction: column;
+      animation: slideInRight 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
     .chat-header {
@@ -200,6 +447,7 @@
       text-align: center;
       font-weight: 500;
       position: relative;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 
     .back-btn {
@@ -210,46 +458,148 @@
       color: white;
       font-size: 1.4rem;
       cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .back-btn:hover {
+      transform: scale(1.2);
     }
 
     #chat-messages {
       flex: 1;
       padding: 16px;
       overflow-y: auto;
-      background: var(--cfm-gray);
+      background: #ece5dd;
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d4d4d4' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+      display: flex;
+      flex-direction: column;
     }
 
-    .chat-message {
-      background: white;
-      padding: 10px;
+    /* MENSAGENS DO CHAT - ESTILO WHATSAPP */
+    .message-container {
+      display: flex;
+      flex-direction: column;
       margin-bottom: 10px;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      animation: messageAppear 0.3s ease;
     }
 
-    .chat-user {
+    @keyframes messageAppear {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      margin-bottom: 4px;
+      position: relative;
+      word-wrap: break-word;
+      animation: fadeInMessage 0.3s ease;
+    }
+
+    .message.sent {
+      background: var(--whatsapp-light);
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.received {
+      background: white;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .message-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      color: var(--text-light);
+      margin-top: 2px;
+    }
+
+    .message-sender {
       font-weight: 600;
-      color: var(--cfm-blue);
       font-size: 0.85rem;
+      margin-bottom: 4px;
     }
 
+    .message.received .message-sender {
+      color: var(--cfm-blue);
+    }
+
+    .message.sent .message-sender {
+      color: var(--success);
+    }
+
+    /* AÇÕES DE MENSAGEM */
+    .message-actions {
+      position: absolute;
+      top: -30px;
+      right: 10px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: none;
+      z-index: 10;
+      animation: fadeIn 0.2s;
+    }
+
+    .message:hover .message-actions {
+      display: flex;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      color: var(--text-light);
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .action-btn:hover {
+      color: var(--cfm-blue);
+      background: var(--cfm-light);
+    }
+
+    .action-btn.delete:hover {
+      color: var(--danger);
+    }
+
+    .action-btn.edit:hover {
+      color: var(--warning);
+    }
+
+    /* INPUT DO CHAT */
     .chat-input-area {
       padding: 12px;
       background: white;
       border-top: 1px solid var(--border);
       display: flex;
+      align-items: center;
     }
 
     #chat-text {
       flex: 1;
-      padding: 10px;
+      padding: 12px 16px;
       border: 1px solid var(--border);
       border-radius: 20px;
       outline: none;
+      font-size: 0.95rem;
+      transition: all 0.3s;
+    }
+
+    #chat-text:focus {
+      border-color: var(--whatsapp-green);
+      box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2);
     }
 
     #chat-send {
-      background: var(--cfm-blue);
+      background: var(--whatsapp-green);
       color: white;
       border: none;
       border-radius: 50%;
@@ -258,36 +608,159 @@
       margin-left: 10px;
       cursor: pointer;
       font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #chat-send:hover:not(.loading) {
+      background: #1da851;
+      transform: scale(1.1);
+    }
+
+    #chat-send.loading {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    #chat-send.loading i {
+      animation: spin 1s linear infinite;
+    }
+
+    /* SCROLLBAR STYLING */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0,0,0,0.3);
+    }
+
+    /* BOTÕES DE AÇÃO NAS ATUALIZAÇÕES */
+    .update-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--cfm-light);
+    }
+
+    .update-action-btn {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .update-action-btn:hover {
+      color: var(--cfm-blue);
+      background: var(--cfm-light);
+    }
+
+    .update-action-btn.copy:hover {
+      color: var(--success);
+    }
+
+    .update-action-btn.share:hover {
+      color: var(--whatsapp-green);
     }
   </style>
 </head>
 <body>
+  <!-- NOTIFICAÇÃO DE NOVAS ATUALIZAÇÕES -->
+  <div id="new-update-notification">
+    <i class="fas fa-bullhorn"></i>
+    <span>Nova actualização disponível!</span>
+    <button style="background:none;border:none;color:white;margin-left:10px;">
+      <i class="fas fa-sync-alt"></i>
+    </button>
+  </div>
+
   <!-- HEADER COM HAMBÚRGUER -->
   <header>
     <button class="hamburger" id="menuToggle">☰</button>
-    <div class="title">Actualizações do Comboio de Passageiros Beira - Moatize</div>
-    <div style="width: 24px;"></div> <!-- Espaço simétrico -->
+    <div class="title">
+      Actualizações do Comboio de Passageiros Beira - Moatize
+      <div class="last-update" id="lastUpdateTime">
+        <i class="fas fa-clock"></i>
+        <span>Última verificação: --:--</span>
+      </div>
+    </div>
+    <button class="refresh-btn" id="manualRefresh" title="Verificar novas actualizações">
+      <i class="fas fa-sync-alt"></i>
+    </button>
   </header>
 
   <!-- MENU LATERAL -->
   <div class="menu" id="menu">
     <div class="menu-header">Menu</div>
-    <div class="menu-item" onclick="openPage('about')">Sobre</div>
-    <div class="menu-item" onclick="openPage('terms')">Termos de Uso</div>
-    <div class="menu-item" onclick="openPage('privacy')">Política de Privacidade</div>
-    <div class="menu-item" onclick="openPage('settings')">Definições</div>
+    <div class="menu-item" onclick="openPage('about')">
+      <i class="fas fa-info-circle"></i> Sobre
+    </div>
+    <div class="menu-item" onclick="openPage('terms')">
+      <i class="fas fa-file-contract"></i> Termos de Uso
+    </div>
+    <div class="menu-item" onclick="openPage('privacy')">
+      <i class="fas fa-shield-alt"></i> Política de Privacidade
+    </div>
+    <div class="menu-item" onclick="openPage('settings')">
+      <i class="fas fa-cog"></i> Definições
+    </div>
+    <div class="menu-item" onclick="openPage('stats')">
+      <i class="fas fa-chart-line"></i> Estatísticas
+    </div>
   </div>
   <div class="overlay" id="overlay"></div>
 
   <!-- CONTEÚDO PRINCIPAL -->
   <div class="container">
+    <!-- LOADER -->
+    <div class="loader-container" id="updatesLoader">
+      <div class="loader"></div>
+    </div>
+
+    <!-- CONTEÚDO DE ATUALIZAÇÕES -->
     <div id="updates-content">
-      <p class="waiting">Aguardando outra actualização...</p>
+      <p class="waiting">A carregar actualizações...</p>
     </div>
   </div>
 
+  <!-- BADGE DE ESTATÍSTICAS -->
+  <div class="stats-badge" id="statsBadge">
+    <i class="fas fa-users"></i>
+    <span id="statsText">Carregando estatísticas...</span>
+  </div>
+
   <!-- BOTÃO DE CHAT -->
-  <button class="chat-btn" id="openChat">💬</button>
+  <button class="chat-btn" id="openChat">
+    <i class="fas fa-comment"></i>
+    <div class="badge" id="chatBadge" style="display: none;">0</div>
+  </button>
+
+  <!-- CONFIRMAÇÃO DE CÓPIA -->
+  <div class="copy-confirmation" id="copyConfirmation">
+    <i class="fas fa-check"></i> Texto copiado!
+  </div>
 
   <!-- TELA DE CHAT -->
   <div class="chat-screen" id="chatScreen">
@@ -295,17 +768,65 @@
       <button class="back-btn" id="closeChat">←</button>
       Chat dos Passageiros
     </div>
-    <div id="chat-messages"></div>
+    <div id="chat-messages">
+      <div class="waiting">Carregando mensagens...</div>
+    </div>
     <div class="chat-input-area">
       <input type="text" id="chat-text" placeholder="Digite sua mensagem..." maxlength="280" />
-      <button id="chat-send">→</button>
+      <button id="chat-send">
+        <i class="fas fa-paper-plane"></i>
+      </button>
     </div>
   </div>
 
   <script>
     // 🔗 Substitua pela URL do seu Google Apps Script
-    const GAS_URL =
-    "https://script.google.com/macros/s/AKfycby7_IGl4-vf2A81zi9STdIWQrBS31M3Ornq1m_6R2lh33a7EcXbP8l2xNBLQUk_S0JJ/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycby7_IGl4-vf2A81zi9STdIWQrBS31M3Ornq1m_6R2lh33a7EcXbP8l2xNBLQUk_S0JJ/exec";
+
+    // ============= VARIÁVEIS GLOBAIS =============
+    let lastUpdateCount = 0;
+    let currentUser = `Passageiro_${Math.floor(100 + Math.random() * 900)}`;
+    let userMessages = {};
+    let cachedUpdates = [];
+
+    // ============= INICIALIZAR USUÁRIO =============
+    function initializeUser() {
+      const savedUser = localStorage.getItem('cfm_user');
+      if (savedUser) {
+        currentUser = savedUser;
+      } else {
+        currentUser = `Passageiro_${Math.floor(100 + Math.random() * 900)}`;
+        localStorage.setItem('cfm_user', currentUser);
+      }
+      console.log(`Usuário: ${currentUser}`);
+    }
+
+    // ============= SISTEMA DE CACHE =============
+    function saveToCache(key, data) {
+      try {
+        localStorage.setItem(`cfm_${key}`, JSON.stringify({
+          data: data,
+          timestamp: Date.now()
+        }));
+      } catch (e) {
+        console.error('Erro ao salvar cache:', e);
+      }
+    }
+
+    function getFromCache(key, maxAge = 3600000) {
+      try {
+        const cached = localStorage.getItem(`cfm_${key}`);
+        if (cached) {
+          const { data, timestamp } = JSON.parse(cached);
+          if (Date.now() - timestamp < maxAge) {
+            return data;
+          }
+        }
+      } catch (e) {
+        console.error('Erro ao ler cache:', e);
+      }
+      return null;
+    }
 
     // ============= MENU HAMBÚRGUER =============
     const menu = document.getElementById('menu');
@@ -325,81 +846,341 @@
     // ============= PÁGINAS DO MENU =============
     function openPage(page) {
       let content = "";
+      let pageTitle = "";
+      
       switch(page) {
         case 'about':
-          content = "<h2>Sobre</h2><p>Este sistema foi criado para fornecer actualizações em tempo real sobre os comboios de passageiros da linha Beira–Moatize, operados pela CFM. Desenvolvido com transparência e foco na comunidade.</p>";
+          pageTitle = "Sobre";
+          content = `
+            <div style="background:var(--cfm-light);padding:20px;border-radius:10px;margin:20px 0;">
+              <h3 style="color:var(--cfm-blue);margin-bottom:10px;">Sobre o Sistema</h3>
+              <p>Este sistema foi criado para fornecer actualizações em tempo real sobre os comboios de passageiros da linha Beira–Moatize, operados pela CFM.</p>
+              <p>Desenvolvido com transparência e foco na comunidade, visa melhorar a comunicação entre a administração e os passageiros.</p>
+            </div>
+          `;
           break;
         case 'terms':
-          content = "<h2>Termos de Uso</h2><p>Ao usar este serviço, você concorda em não enviar mensagens ofensivas, falsas ou enganosas no chat. A CFM não se responsabiliza por informações não oficiais compartilhadas por passageiros.</p>";
+          pageTitle = "Termos de Uso";
+          content = `
+            <div style="background:var(--cfm-light);padding:20px;border-radius:10px;margin:20px 0;">
+              <h3 style="color:var(--cfm-blue);margin-bottom:10px;">Termos de Utilização</h3>
+              <p>Ao usar este serviço, você concorda com os seguintes termos:</p>
+              <ul style="padding-left:20px;margin:10px 0;">
+                <li>Não enviar mensagens ofensivas ou falsas</li>
+                <li>Respeitar outros utilizadores</li>
+                <li>A CFM não se responsabiliza por informações não oficiais</li>
+                <li>Manter um ambiente respeitoso no chat</li>
+              </ul>
+            </div>
+          `;
           break;
         case 'privacy':
-          content = "<h2>Política de Privacidade</h2><p>Não coletamos dados pessoais. Nomes no chat são gerados automaticamente (ex: Passageiro_842). Mensagens são armazenadas apenas para exibição temporária.</p>";
+          pageTitle = "Política de Privacidade";
+          content = `
+            <div style="background:var(--cfm-light);padding:20px;border-radius:10px;margin:20px 0;">
+              <h3 style="color:var(--cfm-blue);margin-bottom:10px;">Privacidade e Dados</h3>
+              <p>O nosso compromisso com a sua privacidade:</p>
+              <ul style="padding-left:20px;margin:10px 0;">
+                <li>Não coletamos dados pessoais</li>
+                <li>Nomes são gerados automaticamente</li>
+                <li>Mensagens são armazenadas temporariamente</li>
+                <li>Não partilhamos informações com terceiros</li>
+              </ul>
+            </div>
+          `;
           break;
         case 'settings':
-          content = "<h2>Definições</h2><p>• Atualizações automáticas a cada 30 segundos<br>• Modo escuro: em breve<br>• Idioma: Português (Moçambique)</p>";
+          pageTitle = "Definições";
+          content = `
+            <div style="background:var(--cfm-light);padding:20px;border-radius:10px;margin:20px 0;">
+              <h3 style="color:var(--cfm-blue);margin-bottom:10px;">Configurações do Sistema</h3>
+              <div style="display:flex;flex-direction:column;gap:15px;">
+                <div>
+                  <strong><i class="fas fa-sync-alt"></i> Atualizações automáticas</strong>
+                  <p>Verifica novas mensagens a cada 15 segundos</p>
+                </div>
+                <div>
+                  <strong><i class="fas fa-bell"></i> Notificações</strong>
+                  <p>Alertas visuais para novas actualizações</p>
+                </div>
+                <div>
+                  <strong><i class="fas fa-language"></i> Idioma</strong>
+                  <p>Português (Moçambique)</p>
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+        case 'stats':
+          pageTitle = "Estatísticas";
+          content = '<div id="statsContent"><p><i class="fas fa-spinner fa-spin"></i> Carregando estatísticas...</p></div>';
           break;
       }
 
       document.querySelector('.container').innerHTML = `
-        <div style="padding:20px;">
-          <h2 style="color:#0d47a1;margin-bottom:16px;">${page === 'about' ? 'Sobre' : page === 'terms' ? 'Termos' : page === 'privacy' ? 'Privacidade' : 'Definições'}</h2>
+        <div style="padding:20px; animation: fadeInUp 0.5s ease;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+            <button onclick="location.reload()" style="background:none;border:none;color:var(--cfm-blue);font-size:1.2rem;cursor:pointer;">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 style="color:#0d47a1;margin:0;">${pageTitle}</h2>
+          </div>
           <div>${content}</div>
-          <button onclick="location.reload()" style="margin-top:20px;background:#0d47a1;color:white;border:none;padding:10px 16px;border-radius:6px;">← Voltar</button>
         </div>
       `;
+      
+      if (page === 'stats') {
+        loadStatsForPage();
+      }
+      
       menu.classList.remove('open');
       overlay.classList.remove('active');
     }
 
-    // ============= TELA PRINCIPAL =============
-    async function loadUpdates() {
-  const container = document.getElementById('updates-content');
-  try {
-    const res = await fetch(`${GAS_URL}?action=updates`);
-    const data = await res.json();
-    const updates = data.updates || [];
-
-    if (updates.length === 0) {
-      container.innerHTML = '<p class="waiting">Aguardando outra actualização...</p>';
-      return;
+    // ============= CARREGAR ATUALIZAÇÕES =============
+    async function loadUpdates(showNotification = true) {
+      const container = document.getElementById('updates-content');
+      const loader = document.getElementById('updatesLoader');
+      
+      loader.classList.add('visible');
+      
+      try {
+        const res = await fetch(`${GAS_URL}?action=updates&t=${Date.now()}`);
+        const data = await res.json();
+        const updates = data.updates || [];
+        
+        // Ordenar por timestamp: mais antigas primeiro (para WhatsApp style)
+        updates.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        
+        const currentCount = updates.length;
+        
+        // Verificar se há novas atualizações
+        if (showNotification && lastUpdateCount > 0 && currentCount > lastUpdateCount) {
+          const newCount = currentCount - lastUpdateCount;
+          showNewUpdateNotification(newCount);
+        }
+        
+        lastUpdateCount = currentCount;
+        
+        // Salvar no cache
+        saveToCache('updates', updates);
+        cachedUpdates = updates;
+        
+        // Renderizar atualizações
+        if (updates.length === 0) {
+          container.innerHTML = '<p class="waiting">Aguardando outra actualização...</p>';
+        } else {
+          renderUpdates(updates, container);
+        }
+        
+        // Atualizar estatísticas
+        updateStatsBadge(updates.length);
+        
+      } catch (e) {
+        console.error('Erro ao carregar atualizações:', e);
+        
+        // Tentar usar cache em caso de erro
+        const cached = getFromCache('updates');
+        if (cached && cached.length > 0) {
+          cachedUpdates = cached;
+          renderUpdates(cached, container);
+          container.innerHTML += '<p style="text-align:center;color:var(--warning);font-size:0.9rem;margin-top:10px;"><i class="fas fa-wifi-slash"></i> Modo offline - usando cache</p>';
+        } else {
+          container.innerHTML = '<p class="waiting">Erro ao carregar actualizações. Verifique sua conexão.</p>';
+        }
+      } finally {
+        loader.classList.remove('visible');
+        updateLastUpdateTime();
+      }
     }
 
-    // ✅ Mostra TODAS as actualizações (não só a última)
-    const html = updates.map(u => {
-      const adminName = u.adminName || "Administração CFM";
-      const time = new Date(u.timestamp).toLocaleString('pt-MZ', {
-        day: '2-digit',
-        month: '2-digit',
+    // ============= RENDERIZAR ATUALIZAÇÕES =============
+    function renderUpdates(updates, container) {
+      // Ordenar por timestamp (mais recentes por último)
+      const sortedUpdates = [...updates].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      
+      // Calcular atrasos para animação
+      const animationDelays = sortedUpdates.map((_, index) => `${index * 0.05}s`);
+      
+      const html = sortedUpdates.map((u, index) => {
+        const adminName = u.adminName || "Administração CFM";
+        const time = new Date(u.timestamp).toLocaleString('pt-MZ', {
+          day: '2-digit',
+          month: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        // Identificar tipo de mensagem
+        const text = u.textoOriginal.toLowerCase();
+        let icon = '📢';
+        if (text.includes('atraso') || text.includes('atrasado')) icon = '⏰';
+        if (text.includes('cancel') || text.includes('cancelado')) icon = '❌';
+        if (text.includes('importante') || text.includes('urgente')) icon = '⚠️';
+        if (text.includes('horário') || text.includes('hora')) icon = '🕒';
+        if (text.includes('partida') || text.includes('chegada')) icon = '🚂';
+
+        // Verificar se é nova (últimos 5 minutos)
+        const isNew = (Date.now() - new Date(u.timestamp).getTime()) < 300000;
+
+        return `
+          <div class="update-card ${isNew ? 'new' : ''}" style="animation-delay: ${animationDelays[index]};">
+            <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+              <span style="font-size:1.5rem;flex-shrink:0;">${icon}</span>
+              <div style="flex:1;">
+                <div class="admin-info" style="margin:0;">
+                  <span class="admin-name">${adminName}</span>
+                  <span>${time}</span>
+                </div>
+                <div class="original-message">${u.textoOriginal.replace(/\n/g, '<br>')}</div>
+              </div>
+            </div>
+            <div class="update-actions">
+              <button onclick="copyToClipboard('${escapeText(u.textoOriginal)}')" class="update-action-btn copy" title="Copiar">
+                <i class="far fa-copy"></i> Copiar
+              </button>
+              <button onclick="shareUpdate('${escapeText(u.textoOriginal)}')" class="update-action-btn share" title="Partilhar">
+                <i class="fas fa-share-alt"></i> Partilhar
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = html;
+    }
+
+    function escapeText(text) {
+      return text.replace(/'/g, "\\'").replace(/\n/g, '\\n');
+    }
+
+    // ============= NOTIFICAÇÕES =============
+    function showNewUpdateNotification(count) {
+      const notification = document.getElementById('new-update-notification');
+      const badge = document.getElementById('chatBadge');
+      
+      // Atualizar texto
+      notification.querySelector('span').textContent = 
+        count === 1 ? 'Nova actualização disponível!' : `${count} novas actualizações disponíveis!`;
+      
+      // Mostrar notificação
+      notification.style.display = 'flex';
+      
+      // Efeito no botão do chat
+      const chatBtn = document.getElementById('openChat');
+      chatBtn.classList.add('pulse');
+      
+      // Atualizar badge
+      if (badge) {
+        const current = parseInt(badge.textContent) || 0;
+        badge.textContent = current + count;
+        badge.style.display = 'flex';
+      }
+      
+      // Play sound
+      playNotificationSound();
+      
+      // Auto-hide após 10 segundos
+      setTimeout(() => {
+        notification.style.display = 'none';
+        chatBtn.classList.remove('pulse');
+      }, 10000);
+      
+      // Click handler
+      notification.onclick = () => {
+        loadUpdates(false);
+        notification.style.display = 'none';
+        chatBtn.classList.remove('pulse');
+      };
+    }
+
+    function playNotificationSound() {
+      try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+      } catch (e) {
+        // Sound not supported
+      }
+    }
+
+    // ============= VERIFICAÇÃO PERIÓDICA =============
+    async function checkForNewUpdates() {
+      try {
+        const res = await fetch(`${GAS_URL}?action=updates&t=${Date.now()}`);
+        const data = await res.json();
+        const updates = data.updates || [];
+        
+        if (lastUpdateCount > 0 && updates.length > lastUpdateCount) {
+          const newCount = updates.length - lastUpdateCount;
+          showNewUpdateNotification(newCount);
+          lastUpdateCount = updates.length;
+        }
+      } catch (e) {
+        console.error('Erro na verificação:', e);
+      }
+    }
+
+    // ============= ATUALIZAR TEMPO =============
+    function updateLastUpdateTime() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('pt-MZ', {
         hour: '2-digit',
         minute: '2-digit'
       });
-
-      return `
-        <div class="update-card">
-          <div class="original-message">${u.textoOriginal.replace(/\n/g, '<br>')}</div>
-          <div class="admin-info">
-            <span>Por: ${adminName}</span>
-            <span>${time}</span>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    container.innerHTML = html + '<p class="waiting">Aguardando outra actualização...</p>';
-  } catch (e) {
-    container.innerHTML = `<p class="waiting">Erro ao carregar actualizações.</p>`;
-    console.error(e);
-  }
-}
-
-    // Extrai nome do administrador da mensagem (ex: "Coutinho Pita")
-    function extractAdminName(text) {
-      const match = text.match(/(?:Actualizações feitas por:|na actualiza[çc][aã]o:|por:)\s*\*?([A-Z\s&]+)\*?/i);
-      if (match) {
-        let name = match[1].replace(/\s*&\s*.+/, '').trim(); // pega só o primeiro nome
-        return name || "Administração CFM";
+      
+      const lastUpdate = document.getElementById('lastUpdateTime');
+      if (lastUpdate) {
+        lastUpdate.innerHTML = `<i class="fas fa-clock"></i> Última verificação: ${timeStr}`;
       }
-      return "Administração CFM";
+    }
+
+    // ============= FUNÇÕES UTILITÁRIAS =============
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showCopyConfirmation();
+      }).catch(() => {
+        // Fallback para navegadores antigos
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showCopyConfirmation();
+      });
+    }
+
+    function showCopyConfirmation() {
+      const confirm = document.getElementById('copyConfirmation');
+      confirm.style.display = 'flex';
+      setTimeout(() => {
+        confirm.style.display = 'none';
+      }, 2000);
+    }
+
+    function shareUpdate(text) {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Actualização CFM - Comboio Beira-Moatize',
+          text: text.substring(0, 100) + '...',
+          url: window.location.href
+        });
+      } else {
+        copyToClipboard(text);
+      }
     }
 
     // ============= CHAT =============
@@ -414,51 +1195,254 @@
 
     async function loadChatMessages() {
       const el = document.getElementById('chat-messages');
+      
       try {
         const res = await fetch(`${GAS_URL}?action=chat`);
         const data = await res.json();
         const chat = data.chat || [];
-        el.innerHTML = chat.map(m => `
-          <div class="chat-message">
-            <div class="chat-user">${m.usuario}</div>
-            <div>${m.mensagem}</div>
-          </div>
-        `).join('');
+        
+        // Ordenar por timestamp (mais antigas primeiro)
+        chat.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        
+        if (chat.length === 0) {
+          el.innerHTML = '<div class="waiting">Nenhuma mensagem ainda. Seja o primeiro a enviar!</div>';
+          return;
+        }
+        
+        el.innerHTML = chat.map(m => {
+          const isCurrentUser = m.usuario === currentUser;
+          const messageId = m.id || Math.random().toString(36).substr(2, 9);
+          
+          if (isCurrentUser) {
+            userMessages[messageId] = m;
+          }
+          
+          // Filtrar palavras ofensivas
+          let filteredMessage = filterOffensiveWords(m.mensagem);
+          
+          return `
+            <div class="message-container">
+              <div class="message ${isCurrentUser ? 'sent' : 'received'}">
+                <div class="message-sender">${m.usuario}</div>
+                <div class="message-text">${filteredMessage}</div>
+                <div class="message-info">
+                  <span>${new Date(m.timestamp).toLocaleTimeString('pt-MZ', {hour: '2-digit', minute:'2-digit'})}</span>
+                  ${isCurrentUser ? '<span><i class="fas fa-check"></i></span>' : ''}
+                </div>
+                ${isCurrentUser ? `
+                  <div class="message-actions">
+                    <button onclick="editMessage('${messageId}')" class="action-btn edit" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button onclick="deleteMessage('${messageId}')" class="action-btn delete" title="Eliminar">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                    <button onclick="copyToClipboard('${escapeText(m.mensagem)}')" class="action-btn" title="Copiar">
+                      <i class="far fa-copy"></i>
+                    </button>
+                  </div>
+                ` : `
+                  <div class="message-actions">
+                    <button onclick="replyToMessage('${m.usuario}', '${escapeText(m.mensagem)}')" class="action-btn" title="Responder">
+                      <i class="fas fa-reply"></i>
+                    </button>
+                    <button onclick="hideMessage(this)" class="action-btn" title="Ocultar">
+                      <i class="fas fa-eye-slash"></i>
+                    </button>
+                    <button onclick="copyToClipboard('${escapeText(m.mensagem)}')" class="action-btn" title="Copiar">
+                      <i class="far fa-copy"></i>
+                    </button>
+                  </div>
+                `}
+              </div>
+            </div>
+          `;
+        }).join('');
+        
+        // Scroll para baixo (mensagens mais recentes)
         el.scrollTop = el.scrollHeight;
+        
       } catch (e) {
-        el.innerHTML = "<p>Erro ao carregar chat.</p>";
+        el.innerHTML = '<div class="message received"><div class="message-text">Erro ao carregar chat. Verifique sua conexão.</div></div>';
       }
     }
 
-    document.getElementById('chat-send').addEventListener('click', async () => {
-  const input = document.getElementById('chat-text');
-  const msg = input.value.trim();
-  if (!msg) return;
+    function filterOffensiveWords(text) {
+      const offensiveWords = ['palavrão', 'insulto', 'xingamento']; // Adicione mais
+      let filtered = text;
+      offensiveWords.forEach(word => {
+        const regex = new RegExp(word, 'gi');
+        filtered = filtered.replace(regex, '***');
+      });
+      return filtered;
+    }
 
-  const formData = new URLSearchParams();
-  formData.append('action', 'chat');
-  formData.append('msg', msg);
+    function replyToMessage(user, message) {
+      const input = document.getElementById('chat-text');
+      input.value = `@${user}: ${message.substring(0, 50)}... `;
+      input.focus();
+    }
 
-  try {
-    await fetch(GAS_URL, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+    function hideMessage(button) {
+      const messageContainer = button.closest('.message-container');
+      messageContainer.style.opacity = '0.5';
+      setTimeout(() => {
+        messageContainer.style.display = 'none';
+      }, 300);
+    }
+
+    function editMessage(messageId) {
+      const message = userMessages[messageId];
+      if (message) {
+        const input = document.getElementById('chat-text');
+        input.value = message.mensagem;
+        input.focus();
+        alert('Funcionalidade de edição em desenvolvimento.');
+      }
+    }
+
+    function deleteMessage(messageId) {
+      if (confirm('Tem certeza que deseja eliminar esta mensagem?')) {
+        const messageDiv = document.querySelector(`[onclick*="${messageId}"]`)?.closest('.message-container');
+        if (messageDiv) {
+          messageDiv.style.animation = 'fadeInMessage 0.3s ease reverse';
+          setTimeout(() => {
+            messageDiv.remove();
+          }, 300);
+        }
+        alert('Funcionalidade de eliminação em desenvolvimento.');
+      }
+    }
+
+    // ============= ENVIAR MENSAGEM =============
+    document.getElementById('chat-send').addEventListener('click', sendChatMessage);
+    document.getElementById('chat-text').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendChatMessage();
       }
     });
-    input.value = '';
-    loadChatMessages();
-  } catch (e) {
-    alert("Não foi possível enviar.");
-    console.error(e);
-  }
-});
+
+    async function sendChatMessage() {
+      const input = document.getElementById('chat-text');
+      const sendBtn = document.getElementById('chat-send');
+      const msg = input.value.trim();
+      
+      if (!msg) return;
+      
+      // Mostrar loader
+      sendBtn.classList.add('loading');
+      sendBtn.disabled = true;
+      
+      const formData = new URLSearchParams();
+      formData.append('action', 'chat');
+      formData.append('msg', msg);
+      formData.append('user', currentUser);
+      
+      try {
+        await fetch(GAS_URL, {
+          method: 'POST',
+          body: formData,
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+        
+        input.value = '';
+        sendBtn.classList.remove('loading');
+        sendBtn.disabled = false;
+        
+        // Efeito de sucesso
+        sendBtn.style.background = '#1da851';
+        setTimeout(() => {
+          sendBtn.style.background = '';
+        }, 500);
+        
+        // Recarregar mensagens
+        await loadChatMessages();
+        
+      } catch (e) {
+        alert("Não foi possível enviar. Verifique sua conexão.");
+        sendBtn.classList.remove('loading');
+        sendBtn.disabled = false;
+      }
+    }
+
+    // ============= ESTATÍSTICAS =============
+    function updateStatsBadge(updateCount) {
+      const badge = document.getElementById('statsBadge');
+      const text = document.getElementById('statsText');
+      
+      if (badge && text) {
+        text.textContent = `${updateCount} actualizações`;
+      }
+    }
+
+    async function loadStatsForPage() {
+      const container = document.getElementById('statsContent');
+      if (!container) return;
+      
+      try {
+        const res = await fetch(`${GAS_URL}?action=stats`);
+        const data = await res.json();
+        
+        container.innerHTML = `
+          <div style="background:white;border-radius:10px;padding:20px;box-shadow:var(--shadow);">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+              <div style="text-align:center;">
+                <div style="font-size:2.5rem;color:var(--cfm-blue);">
+                  <i class="fas fa-bullhorn"></i>
+                </div>
+                <div style="font-size:1.8rem;font-weight:bold;margin:5px 0;">${data.totalUpdates || cachedUpdates.length}</div>
+                <div style="color:var(--text-light);">Actualizações</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="font-size:2.5rem;color:var(--whatsapp-green);">
+                  <i class="fas fa-comments"></i>
+                </div>
+                <div style="font-size:1.8rem;font-weight:bold;margin:5px 0;">${data.totalMessages || 0}</div>
+                <div style="color:var(--text-light);">Mensagens</div>
+              </div>
+            </div>
+            <div style="color:var(--text-light);font-size:0.9rem;text-align:center;">
+              <i class="fas fa-info-circle"></i> Estatísticas em tempo real • Atualizado agora
+            </div>
+          </div>
+        `;
+      } catch (e) {
+        container.innerHTML = `
+          <div style="text-align:center;color:var(--text-light);padding:20px;">
+            <i class="fas fa-chart-line" style="font-size:3rem;opacity:0.3;margin-bottom:10px;"></i>
+            <p>Estatísticas não disponíveis no momento</p>
+          </div>
+        `;
+      }
+    }
+
+    // ============= BOTÃO DE REFRESH MANUAL =============
+    document.getElementById('manualRefresh').addEventListener('click', () => {
+      const btn = document.getElementById('manualRefresh');
+      btn.classList.add('spinning');
+      
+      loadUpdates(false).finally(() => {
+        setTimeout(() => {
+          btn.classList.remove('spinning');
+        }, 1000);
+      });
+    });
 
     // ============= INICIAR =============
-    loadUpdates();
-    // Atualizar a cada 30 segundos
-    setInterval(loadUpdates, 30000);
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeUser();
+      loadUpdates();
+      
+      // Verificar novas atualizações a cada 15 segundos
+      setInterval(checkForNewUpdates, 15000);
+      
+      // Atualizar completamente a cada 30 segundos
+      setInterval(() => loadUpdates(true), 30000);
+      
+      // Atualizar tempo a cada minuto
+      setInterval(updateLastUpdateTime, 60000);
+    });
   </script>
 </body>
 </html>
