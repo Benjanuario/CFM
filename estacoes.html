@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estações - CFM</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --cfm-blue: #0d47a1;
+      --cfm-light: #e3f2fd;
+      --border: #ddd;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+    body { background: #fff; color: #333; padding: 20px; }
+    header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+      color: var(--cfm-blue);
+    }
+    .back-btn {
+      background: none; border: none; font-size: 1.4rem; color: var(--cfm-blue); cursor: pointer;
+    }
+    h1 { font-size: 1.4rem; }
+    .controls {
+      background: var(--cfm-light); padding: 15px; border-radius: 10px; margin-bottom: 20px;
+    }
+    select, button {
+      width: 100%; padding: 10px; margin: 8px 0; border: 1px solid var(--border); border-radius: 6px;
+    }
+    button {
+      background: var(--cfm-blue); color: white; font-weight: bold;
+    }
+    #resultado {
+      display: none; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .estacoes-list {
+      margin-top: 20px;
+    }
+    .estacao-item {
+      display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="back-btn" onclick="history.back()">←</button>
+    <h1><i class="fas fa-map-marked-alt"></i> Estações & Distâncias</h1>
+  </header>
+
+  <div class="controls">
+    <select id="origem"></select>
+    <select id="destino"></select>
+    <button onclick="calcularRota()"><i class="fas fa-calculator"></i> Calcular Rota</button>
+  </div>
+
+  <div id="resultado"></div>
+
+  <div class="estacoes-list">
+    <h3>Estações da Linha Beira – Moatize</h3>
+    <div id="lista-estacoes"></div>
+  </div>
+
+  <script>
+    // 🔗 URL do novo GAS (só para dados estáticos)
+    const GAS_STATIC = "https://script.google.com/macros/s/NOVO_CODIGO/exec";
+    let estacoes = [];
+
+    async function carregarEstacoes() {
+      try {
+        const res = await fetch(`${GAS_STATIC}?action=estacoes`);
+        estacoes = await res.json();
+        
+        const origem = document.getElementById('origem');
+        const destino = document.getElementById('destino');
+        origem.innerHTML = '';
+        destino.innerHTML = '';
+        
+        estacoes.forEach(e => {
+          origem.innerHTML += `<option value="${e.estacao}">${e.estacao}</option>`;
+          destino.innerHTML += `<option value="${e.estacao}">${e.estacao}</option>`;
+        });
+
+        // Mostrar lista
+        const lista = document.getElementById('lista-estacoes');
+        lista.innerHTML = estacoes.map(e => 
+          `<div class="estacao-item"><span>${e.estacao}</span><span>${e.km} km</span></div>`
+        ).join('');
+      } catch (e) {
+        console.error(e);
+        document.getElementById('lista-estacoes').innerHTML = '<p>Erro ao carregar estações.</p>';
+      }
+    }
+
+    function calcularRota() {
+      const origem = document.getElementById('origem').value;
+      const destino = document.getElementById('destino').value;
+      if (origem === destino) {
+        alert("Selecione estações diferentes!");
+        return;
+      }
+
+      const estOrigem = estacoes.find(e => e.estacao === origem);
+      const estDestino = estacoes.find(e => e.estacao === destino);
+      if (!estOrigem || !estDestino) return;
+
+      const dist = Math.abs(estDestino.km - estOrigem.km);
+      const tempoMin = Math.abs(estDestino.tempo - estOrigem.tempo);
+      const horas = Math.floor(tempoMin / 60);
+      const minutos = tempoMin % 60;
+
+      document.getElementById('resultado').innerHTML = `
+        <h4>${origem} → ${destino}</h4>
+        <p><strong>Distância:</strong> ${dist} km</p>
+        <p><strong>Tempo estimado:</strong> ${horas}h ${minutos}m</p>
+      `;
+      document.getElementById('resultado').style.display = 'block';
+    }
+
+    // Iniciar
+    carregarEstacoes();
+  </script>
+</body>
+</html>

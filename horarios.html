@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Horários - CFM</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --cfm-blue: #0d47a1;
+      --cfm-light: #e3f2fd;
+      --text-dark: #222;
+      --text-light: #555;
+      --border: #ddd;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+    body { background: #fff; color: var(--text-dark); padding: 20px; }
+    header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+      color: var(--cfm-blue);
+    }
+    .back-btn {
+      background: none; border: none; font-size: 1.4rem; color: var(--cfm-blue); cursor: pointer;
+    }
+    h1 { font-size: 1.4rem; }
+    .waiting {
+      text-align: center; color: var(--text-light); padding: 40px; font-style: italic;
+    }
+    .horario-card {
+      background: white; border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px; margin-bottom: 15px; box-shadow: var(--shadow);
+    }
+    .route-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px;
+    }
+    .comboio { font-size: 1.2rem; font-weight: bold; color: var(--cfm-blue); }
+    .times { text-align: right; }
+    .time-item { margin: 4px 0; }
+    .play { color: var(--cfm-blue); }
+    .stop { color: var(--text-light); }
+    .days { font-size: 0.85rem; color: var(--text-light); margin-top: 8px; }
+    .estacoes { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--cfm-light); }
+    .loader {
+      text-align: center; padding: 30px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="back-btn" onclick="history.back()">←</button>
+    <h1><i class="fas fa-clock"></i> Horários Oficiais</h1>
+  </header>
+
+  <div id="horarios-container">
+    <div class="loader"><i class="fas fa-spinner fa-spin"></i> Carregando horários...</div>
+  </div>
+
+  <script>
+    // 🔗 Substitua pelo URL do seu NOVO GAS
+    const GAS_STATIC = "https://script.google.com/macros/s/NOVO_CODIGO/exec";
+
+    async function loadHorarios() {
+      const container = document.getElementById('horarios-container');
+      try {
+        const res = await fetch(`${GAS_STATIC}?action=horarios`);
+        const horarios = await res.json();
+
+        if (!horarios || horarios.length === 0) {
+          container.innerHTML = `
+            <div class="waiting">
+              <i class="fas fa-train" style="font-size:3rem;opacity:0.5;margin-bottom:15px;"></i>
+              <p>Nenhum horário disponível no momento.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = '';
+        horarios.forEach(h => {
+          html += `
+            <div class="horario-card">
+              <div class="route-header">
+                <div class="comboio">${h.comboio}</div>
+                <div class="times">
+                  <div class="time-item"><i class="fas fa-play play"></i> ${h.partida}</div>
+                  <div class="time-item"><i class="fas fa-stop stop"></i> ${h.chegada}</div>
+                </div>
+              </div>
+              <div>${h.origem} <i class="fas fa-arrow-right"></i> ${h.destino}</div>
+              <div class="days"><i class="fas fa-calendar-day"></i> Dias: ${h.dias}</div>
+              ${h.estacoes && h.estacoes.length > 0 ? `
+                <div class="estacoes">
+                  <strong>Paragens:</strong> ${h.estacoes.join(" → ")}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = `<div class="waiting">Erro ao carregar horários. Tente novamente.</div>`;
+      }
+    }
+
+    loadHorarios();
+  </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avisos - CFM</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --cfm-blue: #0d47a1;
+      --cfm-light: #e3f2fd;
+      --text-dark: #222;
+      --text-light: #555;
+      --border: #ddd;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --warning: #f57c00;
+      --danger: #c62828;
+      --info: #0288d1;
+      --success: #2e7d32;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+    body { background: #fff; color: var(--text-dark); padding: 20px; }
+    header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+      color: var(--cfm-blue);
+    }
+    .back-btn {
+      background: none; border: none; font-size: 1.4rem; color: var(--cfm-blue); cursor: pointer;
+    }
+    h1 { font-size: 1.4rem; }
+    .waiting {
+      text-align: center; color: var(--text-light); padding: 40px; font-style: italic;
+    }
+    .aviso-card {
+      background: white; border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px; margin-bottom: 15px; box-shadow: var(--shadow);
+    }
+    .aviso-header {
+      display: flex; gap: 10px; margin-bottom: 10px;
+    }
+    .aviso-icon { font-size: 1.6rem; }
+    .aviso-content h3 { margin: 0; color: var(--cfm-blue); }
+    .aviso-desc { margin: 8px 0; line-height: 1.5; }
+    .aviso-pdf {
+      display: inline-flex; align-items: center; gap: 5px;
+      color: var(--danger); text-decoration: none; font-weight: 500;
+    }
+    .aviso-pdf:hover { text-decoration: underline; }
+    .loader {
+      text-align: center; padding: 30px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="back-btn" onclick="history.back()">←</button>
+    <h1><i class="fas fa-exclamation-triangle"></i> Avisos Importantes</h1>
+  </header>
+
+  <div id="avisos-container">
+    <div class="loader"><i class="fas fa-spinner fa-spin"></i> Carregando avisos...</div>
+  </div>
+
+  <script>
+    // 🔗 Substitua pelo URL do seu NOVO GAS (dados estáticos)
+    const GAS_STATIC = "https://script.google.com/macros/s/NOVO_CODIGO/exec";
+
+    function getIconAndColor(type) {
+      switch(type) {
+        case 'atraso': return { icon: '⏰', color: 'var(--warning)' };
+        case 'manutencao': return { icon: '🔧', color: 'var(--info)' };
+        case 'clima': return { icon: '🌧️', color: 'var(--success)' };
+        case 'urgente': return { icon: '⚠️', color: 'var(--danger)' };
+        default: return { icon: 'ℹ️', color: 'var(--cfm-blue)' };
+      }
+    }
+
+    async function loadAvisos() {
+      const container = document.getElementById('avisos-container');
+      try {
+        const res = await fetch(`${GAS_STATIC}?action=avisos`);
+        const avisos = await res.json();
+
+        if (!avisos || avisos.length === 0) {
+          container.innerHTML = `
+            <div class="waiting">
+              <i class="fas fa-bell-slash" style="font-size:3rem;opacity:0.5;margin-bottom:15px;"></i>
+              <p>Nenhum aviso ativo no momento.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = '';
+        avisos.forEach(a => {
+          const { icon, color } = getIconAndColor(a.tipo);
+          html += `
+            <div class="aviso-card">
+              <div class="aviso-header">
+                <span class="aviso-icon" style="color:${color};">${icon}</span>
+                <div>
+                  <h3>${a.titulo}</h3>
+                  <div class="aviso-desc">${a.descricao}</div>
+                  ${a.pdf_url ? `<a href="${a.pdf_url}" target="_blank" class="aviso-pdf"><i class="fas fa-file-pdf"></i> Ver documento oficial</a>` : ''}
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = `<div class="waiting">Erro ao carregar avisos. Tente novamente.</div>`;
+      }
+    }
+
+    loadAvisos();
+  </script>
+</body>
+</html>
