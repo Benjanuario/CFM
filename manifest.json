@@ -1,0 +1,107 @@
+{
+  "name": "CFM Atualizações - Comboio Beira-Moatize",
+  "short_name": "CFM Atualizações",
+  "description": "Sistema de atualizações em tempo real do comboio de passageiros Beira-Moatize",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0d47a1",
+  "theme_color": "#0d47a1",
+  "orientation": "portrait",
+  "categories": ["transportation", "productivity"],
+  "lang": "pt-MZ",
+  
+  "icons": [
+    {
+      "src": "./icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  
+  "screenshots": [
+    {
+      "src": "./screenshot1.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Tela principal com atualizações"
+    },
+    {
+      "src": "./screenshot2.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Chat dos passageiros"
+    }
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "Ver Atualizações",
+      "short_name": "Atualizações",
+      "description": "Ver últimas atualizações do comboio",
+      "url": "./",
+      "icons": [{ "src": "./icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Abrir Chat",
+      "short_name": "Chat",
+      "description": "Conversar com outros passageiros",
+      "url": "./#chat",
+      "icons": [{ "src": "./chat-icon-96.png", "sizes": "96x96" }]
+    }
+  ],
+  
+  "share_target": {
+    "action": "./",
+    "method": "GET",
+    "params": {
+      "title": "name",
+      "text": "description",
+      "url": "link"
+    }
+  }
+}
