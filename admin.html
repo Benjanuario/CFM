@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Admin - CFM Actualizações</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cfm-blue: #0d47a1;
+      --light-bg: #f8fbff;
+      --border: #ccc;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+    body {
+      background: var(--light-bg);
+      color: #222;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    h1 {
+      color: var(--cfm-blue);
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #333;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: white;
+    }
+    textarea {
+      height: 140px;
+      resize: vertical;
+    }
+    button {
+      background: var(--cfm-blue);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      position: relative;
+    }
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    .loader {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top: 2px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    @keyframes spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    .status {
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 500;
+      display: none;
+    }
+    .success { background: #e6f4ea; color: #137333; }
+    .error { background: #fce8e6; color: #c5221f; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📨 Enviar Actualização Oficial</h1>
+  </header>
+
+  <div class="form-group">
+    <label for="adminName">Seu Nome (Administrador)</label>
+    <input type="text" id="adminName" placeholder="Ex: Coutinho Pita" value="Coutinho Pita" />
+  </div>
+
+  <div class="form-group">
+    <label for="message">Mensagem Completa (copie do WhatsApp)</label>
+    <textarea id="message" placeholder="Cole aqui a mensagem completa do grupo oficial..."></textarea>
+  </div>
+
+  <button id="sendBtn" onclick="sendUpdate()">
+    📤 Enviar Actualização
+    <div class="loader" id="loader"></div>
+  </button>
+
+  <div id="status" class="status"></div>
+
+  <script>
+    // ✅ Sua URL do GAS (já configurada!)
+    const GAS_URL = "https://script.google.com/macros/s/AKfycby7_IGl4-vf2A81zi9STdIWQrBS31M3Ornq1m_6R2lh33a7EcXbP8l2xNBLQUk_S0JJ/exec";
+
+    async function sendUpdate() {
+      const msg = document.getElementById('message').value.trim();
+      const adminName = document.getElementById('adminName').value.trim() || "Administração CFM";
+      const btn = document.getElementById('sendBtn');
+      const loader = document.getElementById('loader');
+      const statusEl = document.getElementById('status');
+
+      if (!msg) {
+        showStatus("Por favor, cole a mensagem completa.", false);
+        return;
+      }
+
+      // Ativar loader
+      btn.disabled = true;
+      loader.style.display = "block";
+      statusEl.style.display = "none";
+
+      // Preparar dados para POST
+      const formData = new URLSearchParams();
+      formData.append('action', 'admin_update');
+      formData.append('msg', msg);
+      formData.append('adminName', adminName);
+
+      try {
+        const response = await fetch(GAS_URL, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showStatus("✅ Actualização enviada com sucesso!", true);
+          document.getElementById('message').value = '';
+        } else {
+          showStatus("❌ Erro: " + (result.error || "Falha ao enviar"), false);
+        }
+      } catch (e) {
+        showStatus("⚠️ Erro de conexão: " + e.message, false);
+      } finally {
+        // Desativar loader
+        loader.style.display = "none";
+        btn.disabled = false;
+      }
+    }
+
+    function showStatus(text, success) {
+      const el = document.getElementById('status');
+      el.textContent = text;
+      el.className = "status " + (success ? "success" : "error");
+      el.style.display = "block";
+    }
+  </script>
+</body>
+</html>

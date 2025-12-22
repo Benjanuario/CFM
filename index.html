@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CFM Atualizações</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+  <style>
+    :root {
+      --cfm-blue: #0d47a1;
+      --cfm-light: #e3f2fd;
+      --cfm-gray: #f0f5ff;
+      --text-dark: #222;
+      --text-light: #555;
+      --border: #ddd;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: #fff;
+      color: var(--text-dark);
+      padding-bottom: 80px;
+      line-height: 1.5;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--cfm-blue);
+      color: white;
+      padding: 16px 20px;
+      position: relative;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .title {
+      font-size: 1.1rem;
+      font-weight: 500;
+      text-align: center;
+      flex: 1;
+    }
+
+    .hamburger {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    /* MENU HAMBÚRGUER */
+    .menu {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 260px;
+      height: 100vh;
+       background: white;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+      transition: right 0.3s ease;
+      padding-top: 60px;
+    }
+
+    .menu.open {
+      right: 0;
+    }
+
+    .menu-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 500;
+      color: var(--cfm-blue);
+    }
+
+    .menu-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.2s;
+      color: var(--text-dark);
+    }
+
+    .menu-item:hover {
+      background: var(--cfm-light);
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 999;
+      display: none;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    /* CONTEÚDO PRINCIPAL */
+    .container {
+      padding: 20px;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--cfm-blue);
+      text-align: center;
+    }
+
+    .update-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .original-message {
+      white-space: pre-wrap;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 12px;
+      color: var(--text-dark);
+    }
+
+    .admin-info {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
+    .waiting {
+      text-align: center;
+      color: var(--text-light);
+      font-style: italic;
+      padding: 30px 0;
+    }
+
+    /* BOTÃO DE CHAT */
+    .chat-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 60px;
+      height: 60px;
+      background: var(--cfm-blue);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+
+    .chat-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* TELA DE CHAT (oculta por padrão) */
+    .chat-screen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      z-index: 1100;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      background: var(--cfm-blue);
+      color: white;
+      padding: 16px;
+      text-align: center;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 16px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    #chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      background: var(--cfm-gray);
+    }
+
+    .chat-message {
+      background: white;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .chat-user {
+      font-weight: 600;
+      color: var(--cfm-blue);
+      font-size: 0.85rem;
+    }
+
+    .chat-input-area {
+      padding: 12px;
+      background: white;
+      border-top: 1px solid var(--border);
+      display: flex;
+    }
+
+    #chat-text {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      outline: none;
+    }
+
+    #chat-send {
+      background: var(--cfm-blue);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      margin-left: 10px;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER COM HAMBÚRGUER -->
+  <header>
+    <button class="hamburger" id="menuToggle">☰</button>
+    <div class="title">Actualizações do Comboio de Passageiros Beira - Moatize</div>
+    <div style="width: 24px;"></div> <!-- Espaço simétrico -->
+  </header>
+
+  <!-- MENU LATERAL -->
+  <div class="menu" id="menu">
+    <div class="menu-header">Menu</div>
+    <div class="menu-item" onclick="openPage('about')">Sobre</div>
+    <div class="menu-item" onclick="openPage('terms')">Termos de Uso</div>
+    <div class="menu-item" onclick="openPage('privacy')">Política de Privacidade</div>
+    <div class="menu-item" onclick="openPage('settings')">Definições</div>
+  </div>
+  <div class="overlay" id="overlay"></div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="container">
+    <div id="updates-content">
+      <p class="waiting">Aguardando outra actualização...</p>
+    </div>
+  </div>
+
+  <!-- BOTÃO DE CHAT -->
+  <button class="chat-btn" id="openChat">💬</button>
+
+  <!-- TELA DE CHAT -->
+  <div class="chat-screen" id="chatScreen">
+    <div class="chat-header">
+      <button class="back-btn" id="closeChat">←</button>
+      Chat dos Passageiros
+    </div>
+    <div id="chat-messages"></div>
+    <div class="chat-input-area">
+      <input type="text" id="chat-text" placeholder="Digite sua mensagem..." maxlength="280" />
+      <button id="chat-send">→</button>
+    </div>
+  </div>
+
+  <script>
+    // 🔗 Substitua pela URL do seu Google Apps Script
+    const GAS_URL =
+    "https://script.google.com/macros/s/AKfycby7_IGl4-vf2A81zi9STdIWQrBS31M3Ornq1m_6R2lh33a7EcXbP8l2xNBLQUk_S0JJ/exec";
+
+    // ============= MENU HAMBÚRGUER =============
+    const menu = document.getElementById('menu');
+    const overlay = document.getElementById('overlay');
+    const menuToggle = document.getElementById('menuToggle');
+
+    menuToggle.addEventListener('click', () => {
+      menu.classList.add('open');
+      overlay.classList.add('active');
+    });
+
+    overlay.addEventListener('click', () => {
+      menu.classList.remove('open');
+      overlay.classList.remove('active');
+    });
+
+    // ============= PÁGINAS DO MENU =============
+    function openPage(page) {
+      let content = "";
+      switch(page) {
+        case 'about':
+          content = "<h2>Sobre</h2><p>Este sistema foi criado para fornecer actualizações em tempo real sobre os comboios de passageiros da linha Beira–Moatize, operados pela CFM. Desenvolvido com transparência e foco na comunidade.</p>";
+          break;
+        case 'terms':
+          content = "<h2>Termos de Uso</h2><p>Ao usar este serviço, você concorda em não enviar mensagens ofensivas, falsas ou enganosas no chat. A CFM não se responsabiliza por informações não oficiais compartilhadas por passageiros.</p>";
+          break;
+        case 'privacy':
+          content = "<h2>Política de Privacidade</h2><p>Não coletamos dados pessoais. Nomes no chat são gerados automaticamente (ex: Passageiro_842). Mensagens são armazenadas apenas para exibição temporária.</p>";
+          break;
+        case 'settings':
+          content = "<h2>Definições</h2><p>• Atualizações automáticas a cada 30 segundos<br>• Modo escuro: em breve<br>• Idioma: Português (Moçambique)</p>";
+          break;
+      }
+
+      document.querySelector('.container').innerHTML = `
+        <div style="padding:20px;">
+          <h2 style="color:#0d47a1;margin-bottom:16px;">${page === 'about' ? 'Sobre' : page === 'terms' ? 'Termos' : page === 'privacy' ? 'Privacidade' : 'Definições'}</h2>
+          <div>${content}</div>
+          <button onclick="location.reload()" style="margin-top:20px;background:#0d47a1;color:white;border:none;padding:10px 16px;border-radius:6px;">← Voltar</button>
+        </div>
+      `;
+      menu.classList.remove('open');
+      overlay.classList.remove('active');
+    }
+
+    // ============= TELA PRINCIPAL =============
+    async function loadUpdates() {
+  const container = document.getElementById('updates-content');
+  try {
+    const res = await fetch(`${GAS_URL}?action=updates`);
+    const data = await res.json();
+    const updates = data.updates || [];
+
+    if (updates.length === 0) {
+      container.innerHTML = '<p class="waiting">Aguardando outra actualização...</p>';
+      return;
+    }
+
+    // ✅ Mostra TODAS as actualizações (não só a última)
+    const html = updates.map(u => {
+      const adminName = u.adminName || "Administração CFM";
+      const time = new Date(u.timestamp).toLocaleString('pt-MZ', {
+        day: '2-digit',
+        month: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      return `
+        <div class="update-card">
+          <div class="original-message">${u.textoOriginal.replace(/\n/g, '<br>')}</div>
+          <div class="admin-info">
+            <span>Por: ${adminName}</span>
+            <span>${time}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = html + '<p class="waiting">Aguardando outra actualização...</p>';
+  } catch (e) {
+    container.innerHTML = `<p class="waiting">Erro ao carregar actualizações.</p>`;
+    console.error(e);
+  }
+}
+
+    // Extrai nome do administrador da mensagem (ex: "Coutinho Pita")
+    function extractAdminName(text) {
+      const match = text.match(/(?:Actualizações feitas por:|na actualiza[çc][aã]o:|por:)\s*\*?([A-Z\s&]+)\*?/i);
+      if (match) {
+        let name = match[1].replace(/\s*&\s*.+/, '').trim(); // pega só o primeiro nome
+        return name || "Administração CFM";
+      }
+      return "Administração CFM";
+    }
+
+    // ============= CHAT =============
+    document.getElementById('openChat').addEventListener('click', () => {
+      document.getElementById('chatScreen').style.display = 'flex';
+      loadChatMessages();
+    });
+
+    document.getElementById('closeChat').addEventListener('click', () => {
+      document.getElementById('chatScreen').style.display = 'none';
+    });
+
+    async function loadChatMessages() {
+      const el = document.getElementById('chat-messages');
+      try {
+        const res = await fetch(`${GAS_URL}?action=chat`);
+        const data = await res.json();
+        const chat = data.chat || [];
+        el.innerHTML = chat.map(m => `
+          <div class="chat-message">
+            <div class="chat-user">${m.usuario}</div>
+            <div>${m.mensagem}</div>
+          </div>
+        `).join('');
+        el.scrollTop = el.scrollHeight;
+      } catch (e) {
+        el.innerHTML = "<p>Erro ao carregar chat.</p>";
+      }
+    }
+
+    document.getElementById('chat-send').addEventListener('click', async () => {
+  const input = document.getElementById('chat-text');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  const formData = new URLSearchParams();
+  formData.append('action', 'chat');
+  formData.append('msg', msg);
+
+  try {
+    await fetch(GAS_URL, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    input.value = '';
+    loadChatMessages();
+  } catch (e) {
+    alert("Não foi possível enviar.");
+    console.error(e);
+  }
+});
+
+    // ============= INICIAR =============
+    loadUpdates();
+    // Atualizar a cada 30 segundos
+    setInterval(loadUpdates, 30000);
+  </script>
+</body>
+</html>
