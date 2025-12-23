@@ -3,122 +3,1569 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Estações - CFM</title>
+  <title>Estações CFM - Linha Beira-Moatize</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     :root {
       --cfm-blue: #0d47a1;
-      --cfm-light: #e3f2fd;
-      --border: #ddd;
+      --cfm-neon-blue: #00b4ff;
+      --cfm-purple: #6a11cb;
+      --cfm-pink: #ff2e63;
+      --cfm-cyan: #08d9d6;
+      --cfm-yellow: #ffd600;
+      --cfm-green: #4caf50;
+      --cfm-dark: #0a1931;
+      --cfm-card-bg: rgba(26, 36, 57, 0.9);
+      --text-light: #e3f2fd;
+      --text-dim: #a0b3d9;
+      --glow: 0 0 20px rgba(0, 180, 255, 0.5);
+      --glow-strong: 0 0 30px rgba(0, 180, 255, 0.8);
+      --gradient: linear-gradient(135deg, #0a1931 0%, #1a2439 100%);
+      --gradient-accent: linear-gradient(90deg, #00b4ff, #6a11cb, #ff2e63);
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
-    body { background: #fff; color: #333; padding: 20px; }
-    header {
-      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
-      color: var(--cfm-blue);
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
     }
-    .back-btn {
-      background: none; border: none; font-size: 1.4rem; color: var(--cfm-blue); cursor: pointer;
+
+    body {
+      background: var(--gradient);
+      color: var(--text-light);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-    h1 { font-size: 1.4rem; }
-    .controls {
-      background: var(--cfm-light); padding: 15px; border-radius: 10px; margin-bottom: 20px;
+
+    /* Background animado */
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(106, 17, 203, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 46, 99, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(0, 180, 255, 0.1) 0%, transparent 50%);
     }
-    select, button {
-      width: 100%; padding: 10px; margin: 8px 0; border: 1px solid var(--border); border-radius: 6px;
+
+    .grid-lines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(to right, rgba(0, 180, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 180, 255, 0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -1;
+      animation: gridMove 20s linear infinite;
     }
-    button {
-      background: var(--cfm-blue); color: white; font-weight: bold;
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
     }
-    #resultado {
-      display: none; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+    /* Container principal */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 30px;
+      position: relative;
     }
-    .estacoes-list {
-      margin-top: 20px;
+
+    /* Header futurista */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      padding: 40px 20px;
+      background: var(--cfm-card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(0, 180, 255, 0.2);
+      box-shadow: var(--glow);
+      position: relative;
+      overflow: hidden;
     }
-    .estacao-item {
-      display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 180, 255, 0.1), transparent);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .logo-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--gradient-accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2.5rem;
+      box-shadow: var(--glow-strong);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .logo-text h1 {
+      font-size: 3rem;
+      background: linear-gradient(90deg, #00b4ff, #6a11cb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .logo-text span {
+      color: var(--text-dim);
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      font-size: 1.4rem;
+      color: var(--cfm-cyan);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* Cards de estatísticas */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin: 40px 0;
+    }
+
+    .stat-card {
+      background: var(--cfm-card-bg);
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      border: 1px solid rgba(0, 180, 255, 0.3);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--cfm-neon-blue);
+      box-shadow: var(--glow);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient-accent);
+    }
+
+    .stat-number {
+      font-size: 3.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #00b4ff, #ff2e63);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .stat-label {
+      color: var(--text-dim);
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Seções das estações */
+    .route-container {
+      background: var(--cfm-card-bg);
+      border-radius: 20px;
+      padding: 40px;
+      margin: 50px 0;
+      border: 1px solid rgba(0, 180, 255, 0.2);
+      position: relative;
+    }
+
+    .route-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid rgba(0, 180, 255, 0.3);
+    }
+
+    .route-title {
+      font-size: 2rem;
+      background: linear-gradient(90deg, #00b4ff, #6a11cb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .route-info {
+      display: flex;
+      gap: 30px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(0, 180, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cfm-neon-blue);
+    }
+
+    /* Grid de estações */
+    .stations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .station-card {
+      background: rgba(26, 36, 57, 0.7);
+      border-radius: 15px;
+      padding: 25px;
+      border: 1px solid rgba(0, 180, 255, 0.2);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .station-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--cfm-neon-blue);
+      box-shadow: var(--glow);
+    }
+
+    .station-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 100%;
+    }
+
+    .station-card.primary::before {
+      background: linear-gradient(180deg, #ff2e63, #ff8a00);
+    }
+
+    .station-card.secondary::before {
+      background: linear-gradient(180deg, #00b4ff, #0088cc);
+    }
+
+    .station-card.tertiary::before {
+      background: linear-gradient(180deg, #6a11cb, #8a2be2);
+    }
+
+    .station-card.branch::before {
+      background: linear-gradient(180deg, #ffd600, #ffaa00);
+    }
+
+    .station-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .station-order {
+      width: 40px;
+      height: 40px;
+      background: rgba(0, 180, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--cfm-neon-blue);
+      font-size: 1.2rem;
+    }
+
+    .station-name {
+      font-size: 1.6rem;
+      color: var(--cfm-cyan);
+      flex: 1;
+      margin-left: 15px;
+    }
+
+    .station-distance {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--cfm-neon-blue);
+      font-family: 'Courier New', monospace;
+      min-width: 100px;
+      text-align: right;
+    }
+
+    .station-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 15px;
+      background: rgba(0, 180, 255, 0.05);
+      border-radius: 20px;
+      font-size: 0.9rem;
+    }
+
+    .detail-item i {
+      color: var(--cfm-pink);
+    }
+
+    .station-type {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 10px;
+    }
+
+    .type-primary {
+      background: rgba(255, 46, 99, 0.2);
+      color: #ff2e63;
+      border: 1px solid rgba(255, 46, 99, 0.3);
+    }
+
+    .type-secondary {
+      background: rgba(0, 180, 255, 0.2);
+      color: #00b4ff;
+      border: 1px solid rgba(0, 180, 255, 0.3);
+    }
+
+    .type-tertiary {
+      background: rgba(106, 17, 203, 0.2);
+      color: #6a11cb;
+      border: 1px solid rgba(106, 17, 203, 0.3);
+    }
+
+    .type-branch {
+      background: rgba(255, 214, 0, 0.2);
+      color: #ffd600;
+      border: 1px solid rgba(255, 214, 0, 0.3);
+    }
+
+    /* Legenda */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 30px 0;
+      padding: 20px;
+      background: rgba(0, 180, 255, 0.05);
+      border-radius: 15px;
+      border: 1px solid rgba(0, 180, 255, 0.2);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+    }
+
+    .legend-text {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    /* Mapa interativo */
+    .map-container {
+      background: var(--cfm-card-bg);
+      border-radius: 20px;
+      padding: 40px;
+      margin: 50px 0;
+      border: 1px solid rgba(0, 180, 255, 0.2);
+    }
+
+    .map-title {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 30px;
+      background: linear-gradient(90deg, #00b4ff, #6a11cb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .map-visual {
+      height: 500px;
+      background: rgba(10, 25, 49, 0.8);
+      border-radius: 15px;
+      border: 1px solid rgba(0, 180, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-line {
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      right: 5%;
+      height: 4px;
+      background: var(--gradient-accent);
+      box-shadow: var(--glow);
+    }
+
+    .map-point {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: var(--cfm-dark);
+      border: 3px solid;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .map-point:hover {
+      transform: translate(-50%, -50%) scale(1.8);
+      box-shadow: 0 0 20px;
+    }
+
+    .map-label {
+      position: absolute;
+      color: var(--cfm-cyan);
+      font-size: 0.9rem;
+      white-space: nowrap;
+      transform: translateX(-50%);
+      background: rgba(10, 25, 49, 0.8);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 180, 255, 0.3);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .map-point:hover + .map-label {
+      opacity: 1;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px 20px;
+      margin-top: 60px;
+      border-top: 1px solid rgba(0, 180, 255, 0.2);
+      color: var(--text-dim);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 25px 0;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: var(--cfm-cyan);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      transition: all 0.3s;
+      background: rgba(0, 180, 255, 0.05);
+    }
+
+    .footer-link:hover {
+      background: rgba(0, 180, 255, 0.2);
+      transform: translateY(-3px);
+      box-shadow: var(--glow);
+    }
+
+    /* Botões */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 35px;
+      background: linear-gradient(90deg, #00b4ff, #6a11cb);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--glow-strong);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--cfm-neon-blue);
+      color: var(--cfm-neon-blue);
+    }
+
+    .btn-outline:hover {
+      background: rgba(0, 180, 255, 0.1);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* Animações */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .floating {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Responsividade */
+    @media (max-width: 1024px) {
+      .container {
+        padding: 20px;
+      }
+      
+      .logo-text h1 {
+        font-size: 2.2rem;
+      }
+      
+      .route-header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+      
+      .stations-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .logo {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .logo-text {
+        align-items: center;
+      }
+      
+      .station-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+      }
+      
+      .station-distance {
+        text-align: center;
+        min-width: auto;
+      }
+      
+      .btn-group {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .stations-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo-text h1 {
+        font-size: 1.8rem;
+      }
+      
+      .subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .stat-number {
+        font-size: 2.5rem;
+      }
+      
+      .station-name {
+        font-size: 1.3rem;
+      }
+      
+      .station-distance {
+        font-size: 1.4rem;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <button class="back-btn" onclick="history.back()">←</button>
-    <h1><i class="fas fa-map-marked-alt"></i> Estações & Distâncias</h1>
-  </header>
+  <!-- Background animado -->
+  <div class="background"></div>
+  <div class="grid-lines"></div>
 
-  <div class="controls">
-    <select id="origem"></select>
-    <select id="destino"></select>
-    <button onclick="calcularRota()"><i class="fas fa-calculator"></i> Calcular Rota</button>
-  </div>
+  <div class="container">
+    <!-- Header -->
+    <header class="header floating">
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-train"></i>
+        </div>
+        <div class="logo-text">
+          <h1>Estações CFM</h1>
+          <span>Linha Beira-Moatize • Todas as Paragens</span>
+        </div>
+      </div>
+      
+      <p class="subtitle">Mapa completo de todas as 37 estações e apeadeiros da linha ferroviária</p>
+      
+      <div class="btn-group">
+        <a href="index.html" class="btn">
+          <i class="fas fa-home"></i> Voltar ao Início
+        </a>
+        <a href="sobre.html" class="btn btn-outline">
+          <i class="fas fa-info-circle"></i> Sobre o Sistema
+        </a>
+        <button class="btn btn-outline" onclick="window.print()">
+          <i class="fas fa-print"></i> Imprimir Rota
+        </button>
+      </div>
+    </header>
 
-  <div id="resultado"></div>
+    <!-- Estatísticas -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">611</div>
+        <div class="stat-label">Km Totais</div>
+        <p>Beira → Moatize (total)</p>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-number">37</div>
+        <div class="stat-label">Paragens</div>
+        <p>28 estações principais + 9 ramal</p>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-number">12-14</div>
+        <div class="stat-label">Horas</div>
+        <p>Duração total da viagem</p>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-number">2025</div>
+        <div class="stat-label">Atualizado</div>
+        <p>Dados Oficiais CFM</p>
+      </div>
+    </div>
 
-  <div class="estacoes-list">
-    <h3>Estações da Linha Beira – Moatize</h3>
-    <div id="lista-estacoes"></div>
+    <!-- CORREÇÃO: Distâncias consistentes -->
+    <div class="route-container">
+      <div class="route-header">
+        <h2 class="route-title"><i class="fas fa-ruler-combined"></i> Distâncias Oficiais</h2>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 20px;">
+        <div style="background: rgba(255, 46, 99, 0.05); padding: 25px; border-radius: 15px; border-left: 4px solid #ff2e63;">
+          <h3 style="color: #ff2e63; margin-bottom: 10px;">Beira → Dona Ana</h3>
+          <div style="font-size: 2.5rem; font-weight: bold; color: #ff2e63;">295 km</div>
+          <p style="color: var(--text-dim);">Linha Principal (28 estações)</p>
+        </div>
+        
+        <div style="background: rgba(255, 214, 0, 0.05); padding: 25px; border-radius: 15px; border-left: 4px solid #ffd600;">
+          <h3 style="color: #ffd600; margin-bottom: 10px;">Dona Ana → Moatize</h3>
+          <div style="font-size: 2.5rem; font-weight: bold; color: #ffd600;">91 km</div>
+          <p style="color: var(--text-dim);">Ramal (9 estações)</p>
+        </div>
+        
+        <div style="background: rgba(8, 217, 214, 0.05); padding: 25px; border-radius: 15px; border-left: 4px solid #08d9d6;">
+          <h3 style="color: #08d9d6; margin-bottom: 10px;">Total Beira → Moatize</h3>
+          <div style="font-size: 2.5rem; font-weight: bold; color: #08d9d6;">386 km</div>
+          <p style="color: var(--text-dim);">Distância operacional atual</p>
+        </div>
+        
+        <div style="background: rgba(106, 17, 203, 0.05); padding: 25px; border-radius: 15px; border-left: 4px solid #6a11cb;">
+          <h3 style="color: #6a11cb; margin-bottom: 10px;">Extensão Total Linha</h3>
+          <div style="font-size: 2.5rem; font-weight: bold; color: #6a11cb;">611 km</div>
+          <p style="color: var(--text-dim);">Incluindo extensões históricas</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legenda -->
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color" style="background: #ff2e63;"></div>
+        <div class="legend-text">Estação Principal (Parada obrigatória)</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #00b4ff;"></div>
+        <div class="legend-text">Estação Secundária (Paragem regular)</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #6a11cb;"></div>
+        <div class="legend-text">Estação Terciária (Paragem sob pedido)</div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #ffd600;"></div>
+        <div class="legend-text">Ramal Moatize (Linha de carga/passageiros)</div>
+      </div>
+    </div>
+
+    <!-- Linha Principal - TODAS AS ESTAÇÕES -->
+    <div class="route-container">
+      <div class="route-header">
+        <h2 class="route-title"><i class="fas fa-route"></i> Linha Principal Beira → Dona Ana</h2>
+        <div class="route-info">
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-ruler"></i>
+            </div>
+            <div>
+              <div>295 km</div>
+              <small>28 Estações</small>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div>
+              <div>7-8 horas</div>
+              <small>Tempo de viagem</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stations-grid">
+        <!-- Beira -->
+        <div class="station-card primary">
+          <div class="station-header">
+            <div class="station-order">1</div>
+            <div class="station-name">Beira</div>
+            <div class="station-distance">0 km</div>
+          </div>
+          <p>Estação principal - Ponto inicial da Linha de Sena</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-flag-checkered"></i> Terminal Inicial</div>
+            <div class="detail-item"><i class="fas fa-port"></i> Porto da Beira</div>
+            <div class="detail-item"><i class="fas fa-city"></i> Cidade Principal</div>
+          </div>
+          <div class="station-type type-primary">Estação Principal</div>
+        </div>
+
+        <!-- Manga -->
+        <div class="station-card secondary">
+          <div class="station-header">
+            <div class="station-order">2</div>
+            <div class="station-name">Manga</div>
+            <div class="station-distance">9 km</div>
+          </div>
+          <p>Pequeno apeadeiro suburbano da Beira</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-subway"></i> Apeadeiro Suburbano</div>
+            <div class="detail-item"><i class="fas fa-home"></i> Zona Residencial</div>
+          </div>
+          <div class="station-type type-secondary">Estação Secundária</div>
+        </div>
+
+        <!-- Inhamizua -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">3</div>
+            <div class="station-name">Inhamizua</div>
+            <div class="station-distance">12 km</div>
+          </div>
+          <p>Apeadeiro intermédio entre Beira e Dondo</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-map-marker-alt"></i> Apeadeiro</div>
+            <div class="detail-item"><i class="fas fa-road"></i> Zona Suburbana</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Pôvoa -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">4</div>
+            <div class="station-name">Pôvoa</div>
+            <div class="station-distance">19 km</div>
+          </div>
+          <p>Pequena paragem rural</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Nova Macieira -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">5</div>
+            <div class="station-name">Nova Macieira</div>
+            <div class="station-distance">26 km</div>
+          </div>
+          <p>Paragem intermédia</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Dondo -->
+        <div class="station-card primary">
+          <div class="station-header">
+            <div class="station-order">6</div>
+            <div class="station-name">Dondo</div>
+            <div class="station-distance">35 km</div>
+          </div>
+          <p>Principal nó ferroviário - Estação Dondo-1 / Dondo-2</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-exchange-alt"></i> Nó Ferroviário</div>
+            <div class="detail-item"><i class="fas fa-industry"></i> Zona Industrial</div>
+            <div class="detail-item"><i class="fas fa-train"></i> Estação Dupla</div>
+          </div>
+          <div class="station-type type-primary">Estação Principal</div>
+        </div>
+
+        <!-- Milha 8 -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">7</div>
+            <div class="station-name">Milha 8</div>
+            <div class="station-distance">42 km</div>
+          </div>
+          <p>Paragem por quilometragem - pequeno apeadeiro</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-map-pin"></i> Paragem por Milha</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Savane -->
+        <div class="station-card secondary">
+          <div class="station-header">
+            <div class="station-order">8</div>
+            <div class="station-name">Savane</div>
+            <div class="station-distance">54 km</div>
+          </div>
+          <p>Estação intermédia entre Dondo e Muanza</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Estação Intermédia</div>
+          </div>
+          <div class="station-type type-secondary">Estação Secundária</div>
+        </div>
+
+        <!-- Milha 26 -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">9</div>
+            <div class="station-name">Milha 26</div>
+            <div class="station-distance">68 km</div>
+          </div>
+          <p>Paragem por quilometragem</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-map-pin"></i> Paragem por Milha</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Semacueza -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">10</div>
+            <div class="station-name">Semacueza</div>
+            <div class="station-distance">85 km</div>
+          </div>
+          <p>Paragem rural intermédia</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Nhassato -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">11</div>
+            <div class="station-name">Nhassato</div>
+            <div class="station-distance">98 km</div>
+          </div>
+          <p>Paragem rural</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Derunde -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">12</div>
+            <div class="station-name">Derunde</div>
+            <div class="station-distance">111 km</div>
+          </div>
+          <p>Paragem intermédia</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Muanza -->
+        <div class="station-card secondary">
+          <div class="station-header">
+            <div class="station-order">13</div>
+            <div class="station-name">Muanza</div>
+            <div class="station-distance">134 km</div>
+          </div>
+          <p>Vila importante ao longo da linha</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-village"></i> Vila Importante</div>
+            <div class="detail-item"><i class="fas fa-users"></i> Paragem Regular</div>
+          </div>
+          <div class="station-type type-secondary">Estação Secundária</div>
+        </div>
+
+        <!-- Chenapamimba -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">14</div>
+            <div class="station-name">Chenapamimba</div>
+            <div class="station-distance">146 km</div>
+          </div>
+          <p>Paragem rural</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Condué -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">15</div>
+            <div class="station-name">Condué</div>
+            <div class="station-distance">158 km</div>
+          </div>
+          <p>Paragem intermédia</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Mazamba -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">16</div>
+            <div class="station-name">Mazamba</div>
+            <div class="station-distance">174 km</div>
+          </div>
+          <p>Paragem rural</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Santa-C -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">17</div>
+            <div class="station-name">Santa-C</div>
+            <div class="station-distance">186 km</div>
+          </div>
+          <p>Paragem com nome abreviado</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Inhaminga -->
+        <div class="station-card primary">
+          <div class="station-header">
+            <div class="station-order">18</div>
+            <div class="station-name">Inhaminga</div>
+            <div class="station-distance">194 km</div>
+          </div>
+          <p>Estação central da vila de Inhaminga</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-city"></i> Centro da Vila</div>
+            <div class="detail-item"><i class="fas fa-store"></i> Zona Comercial</div>
+            <div class="detail-item"><i class="fas fa-users"></i> Paragem Importante</div>
+          </div>
+          <div class="station-type type-primary">Estação Principal</div>
+        </div>
+
+        <!-- Becanta -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">19</div>
+            <div class="station-name">Becanta</div>
+            <div class="station-distance">206 km</div>
+          </div>
+          <p>Paragem após Inhaminga</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Inhamitanga -->
+        <div class="station-card secondary">
+          <div class="station-header">
+            <div class="station-order">20</div>
+            <div class="station-name">Inhamitanga</div>
+            <div class="station-distance">219 km</div>
+          </div>
+          <p>Intersecção com ramal para Marromeu</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-code-branch"></i> Ponto de Divisão</div>
+            <div class="detail-item"><i class="fas fa-route"></i> Direção Marromeu</div>
+          </div>
+          <div class="station-type type-secondary">Estação Secundária</div>
+        </div>
+
+        <!-- Lavos -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">21</div>
+            <div class="station-name">Lavos</div>
+            <div class="station-distance">229 km</div>
+          </div>
+          <p>Paragem intermédia</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Nángue -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">22</div>
+            <div class="station-name">Nángue</div>
+            <div class="station-distance">241 km</div>
+          </div>
+          <p>Paragem próxima ao Rio Zambeze</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Caia -->
+        <div class="station-card primary">
+          <div class="station-header">
+            <div class="station-order">23</div>
+            <div class="station-name">Caia</div>
+            <div class="station-distance">256 km</div>
+          </div>
+          <p>Cidade importante às margens do Rio Zambeze</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-water"></i> Rio Zambeze</div>
+            <div class="detail-item"><i class="fas fa-city"></i> Cidade Principal</div>
+            <div class="detail-item"><i class="fas fa-bridge"></i> Ponte do Zambeze</div>
+          </div>
+          <div class="station-type type-primary">Estação Principal</div>
+        </div>
+
+        <!-- Muraça -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">24</div>
+            <div class="station-name">Muraça</div>
+            <div class="station-distance">269 km</div>
+          </div>
+          <p>Paragem após Caia</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Magagade -->
+        <div class="station-card tertiary">
+          <div class="station-header">
+            <div class="station-order">25</div>
+            <div class="station-name">Magagade</div>
+            <div class="station-distance">272 km</div>
+          </div>
+          <p>Paragem próxima a Muraça</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Rural</div>
+          </div>
+          <div class="station-type type-tertiary">Paragem Opcional</div>
+        </div>
+
+        <!-- Checha (Inharuca) -->
+        <div class="station-card secondary">
+          <div class="station-header">
+            <div class="station-order">26</div>
+            <div class="station-name">Checha (Inharuca)</div>
+            <div class="station-distance">279 km</div>
+          </div>
+          <p>Estação também conhecida como Inharuca</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-map-marker-alt"></i> Nome Duplo</div>
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Regular</div>
+          </div>
+          <div class="station-type type-secondary">Estação Secundária</div>
+        </div>
+
+        <!-- Sena -->
+        <div class="station-card primary">
+          <div class="station-header">
+            <div class="station-order">27</div>
+            <div class="station-name">Sena</div>
+            <div class="station-distance">285 km</div>
+          </div>
+          <p>Estação histórica no vale do Zambeze</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-landmark"></i> Estação Histórica</div>
+            <div class="detail-item"><i class="fas fa-valley"></i> Vale do Zambeze</div>
+            <div class="detail-item"><i class="fas fa-history"></i> Importância Histórica</div>
+          </div>
+          <div class="station-type type-primary">Estação Principal</div>
+        </div>
+
+        <!-- Dona Ana (Nhamayabué) -->
+        <div class="station-card primary">
+          <div class="station-header">
+            <div class="station-order">28</div>
+            <div class="station-name">Dona Ana (Nhamayabué)</div>
+            <div class="station-distance">295 km</div>
+          </div>
+          <p>Ponto de ligação ao Ramal para Moatize</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-code-branch"></i> Ponto de Divisão</div>
+            <div class="detail-item"><i class="fas fa-route"></i> Início do Ramal</div>
+            <div class="detail-item"><i class="fas fa-diamond"></i> Direção Minas</div>
+          </div>
+          <div class="station-type type-primary">Estação Principal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ramal Moatize - TODAS AS ESTAÇÕES -->
+    <div class="route-container">
+      <div class="route-header">
+        <h2 class="route-title"><i class="fas fa-code-branch"></i> Ramal Dona Ana → Moatize</h2>
+        <div class="route-info">
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-ruler"></i>
+            </div>
+            <div>
+              <div>91 km</div>
+              <small>9 Estações</small>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div>
+              <div>2-3 horas</div>
+              <small>Tempo do ramal</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stations-grid">
+        <!-- Dona Ana (já listada, mas como ponto inicial do ramal) -->
+        
+        <!-- Doa -->
+        <div class="station-card branch">
+          <div class="station-header">
+            <div class="station-order">29</div>
+            <div class="station-name">Doa</div>
+            <div class="station-distance">14 km*</div>
+          </div>
+          <p>Primeira estação do ramal após Dona Ana</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Início do Ramal</div>
+            <div class="detail-item"><i class="fas fa-road"></i> Primeira Paragem</div>
+          </div>
+          <div class="station-type type-branch">Ramal Moatize</div>
+        </div>
+
+        <!-- Chueza -->
+        <div class="station-card branch">
+          <div class="station-header">
+            <div class="station-order">30</div>
+            <div class="station-name">Chueza</div>
+            <div class="station-distance">22 km*</div>
+          </div>
+          <p>Paragem intermédia no ramal</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Intermédia</div>
+          </div>
+          <div class="station-type type-branch">Ramal Moatize</div>
+        </div>
+
+        <!-- Mecito (Mecondezi) -->
+        <div class="station-card branch">
+          <div class="station-header">
+            <div class="station-order">31</div>
+            <div class="station-name">Mecito (Mecondezi)</div>
+            <div class="station-distance">40 km*</div>
+          </div>
+          <p>Estação com nome alternativo Mecondezi</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-map-marker-alt"></i> Nome Duplo</div>
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Regular</div>
+          </div>
+          <div class="station-type type-branch">Ramal Moatize</div>
+        </div>
+
+        <!-- Necungas -->
+        <div class="station-card branch">
+          <div class="station-header">
+            <div class="station-order">32</div>
+            <div class="station-name">Necungas</div>
+            <div class="station-distance">52 km*</div>
+          </div>
+          <p>Paragem no meio do ramal</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Intermédia</div>
+          </div>
+          <div class="station-type type-branch">Ramal Moatize</div>
+        </div>
+
+        <!-- Entoe (Entoe/Etsoe) -->
+        <div class="station-card branch">
+          <div class="station-header">
+            <div class="station-order">33</div>
+            <div class="station-name">Entoe (Entoe/Etsoe)</div>
+            <div class="station-distance">62 km*</div>
+          </div>
+          <p>Estação com múltiplas grafias</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-language"></i> Nome Alternativo</div>
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Regular</div>
+          </div>
+          <div class="station-type type-branch">Ramal Moatize</div>
+        </div>
+
+        <!-- Cambulatsitse -->
+        <div class="station-card branch">
+          <div class="station-header">
+            <div class="station-order">34</div>
+            <div class="station-name">Cambulatsitse</div>
+            <div class="station-distance">72 km*</div>
+          </div>
+          <p>Paragem antes de Cateme</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Paragem Intermédia</div>
+          </div>
+          <div class="station-type type-branch">Ramal Moatize</div>
+        </div>
+
+        <!-- Cateme -->
+        <div class="station-card branch">
+          <div class="station-header">
+            <div class="station-order">35</div>
+            <div class="station-name">Cateme</div>
+            <div class="station-distance">81 km*</div>
+          </div>
+          <p>Última paragem antes de Moatize</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-train"></i> Penúltima Estação</div>
+            <div class="detail-item"><i class="fas fa-map-marker-alt"></i> Próximo a Moatize</div>
+          </div>
+          <div class="station-type type-branch">Ramal Moatize</div>
+        </div>
+
+        <!-- Moatize -->
+        <div class="station-card branch">
+          <div class="station-header">
+            <div class="station-order">36</div>
+            <div class="station-name">Moatize</div>
+            <div class="station-distance">91 km*</div>
+          </div>
+          <p>Terminal do ramal - Depósito/Estação de Moatize</p>
+          <div class="station-details">
+            <div class="detail-item"><i class="fas fa-flag-checkered"></i> Terminal Final</div>
+            <div class="detail-item"><i class="fas fa-mountain"></i> Bacia Carbonífera</div>
+            <div class="detail-item"><i class="fas fa-industry"></i> Zona Mineira</div>
+            <div class="detail-item"><i class="fas fa-truck-loading"></i> Carregamento</div>
+          </div>
+          <div class="station-type type-branch">Ramal Moatize</div>
+        </div>
+      </div>
+      <p style="margin-top: 20px; color: var(--text-dim); font-size: 0.9rem;">
+        * Distância a partir de Dona Ana. Distância total desde Beira: 295 km (linha principal) + distância do ramal.
+      </p>
+    </div>
+
+    <!-- Mapa Interativo -->
+    <div class="map-container">
+      <h2 class="map-title"><i class="fas fa-map-marked-alt"></i> Mapa da Linha Ferroviária</h2>
+      <div class="map-visual">
+        <div class="map-line"></div>
+        <!-- Pontos principais no mapa -->
+        <div class="map-point" style="left: 5%; top: 50%; border-color: #ff2e63;"></div>
+        <div class="map-label" style="left: 5%; top: 40%;">Beira (0 km)</div>
+        
+        <div class="map-point" style="left: 15%; top: 50%; border-color: #00b4ff;"></div>
+        <div class="map-label" style="left: 15%; top: 40%;">Dondo (35 km)</div>
+        
+        <div class="map-point" style="left: 35%; top: 50%; border-color: #ff2e63;"></div>
+        <div class="map-label" style="left: 35%; top: 40%;">Inhaminga (194 km)</div>
+        
+        <div class="map-point" style="left: 45%; top: 50%; border-color: #ff2e63;"></div>
+        <div class="map-label" style="left: 45%; top: 40%;">Caia (256 km)</div>
+        
+        <div class="map-point" style="left: 55%; top: 50%; border-color: #ff2e63;"></div>
+        <div class="map-label" style="left: 55%; top: 40%;">Dona Ana (295 km)</div>
+        
+        <div class="map-point" style="left: 85%; top: 50%; border-color: #ffd600;"></div>
+        <div class="map-label" style="left: 85%; top: 40%;">Moatize (386 km)</div>
+        
+        <!-- Linha do ramal -->
+        <div style="position: absolute; left: 55%; top: 50%; width: 30%; height: 4px; background: #ffd600; box-shadow: var(--glow); transform: rotate(5deg); transform-origin: left center;"></div>
+      </div>
+    </div>
+
+    <!-- Resumo Operacional -->
+    <div class="route-container">
+      <div class="route-header">
+        <h2 class="route-title"><i class="fas fa-info-circle"></i> Resumo Operacional 2025</h2>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 30px;">
+        <div style="background: rgba(0, 180, 255, 0.05); padding: 25px; border-radius: 15px; border-left: 4px solid #00b4ff;">
+          <h3 style="color: #00b4ff; margin-bottom: 15px;"><i class="fas fa-users"></i> Passageiros</h3>
+          <p><strong>Serviços regulares para transporte de passageiros</strong>
+          dia pós dia ao serviço do povo.</p>
+          <p style="margin-top: 10px; color: var(--cfm-cyan);"><i class="fas
+          fa-train"></i> Frequência: 2 vezes por semana</p>
+        </div>
+        
+        <div style="background: rgba(255, 214, 0, 0.05); padding: 25px; border-radius: 15px; border-left: 4px solid #ffd600;">
+          <h3 style="color: #ffd600; margin-bottom: 15px;"><i class="fas fa-truck-loading"></i> Carga</h3>
+          <p><strong>Linha fundamental para transporte de carvão</strong> minerado em Moatize para o Porto da Beira. Artéria logística central da economia do centro do país.</p>
+          <p style="margin-top: 10px; color: var(--cfm-cyan);"><i class="fas fa-weight-hanging"></i> Principal: Carvão mineral</p>
+        </div>
+    
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="index.html" class="footer-link">
+          <i class="fas fa-home"></i> Início
+        </a>
+        <a href="sobre.html" class="footer-link">
+          <i class="fas fa-info-circle"></i> Sobre
+        </a>
+        <a href="politicas.html" class="footer-link">
+          <i class="fas fa-shield-alt"></i> Privacidade
+        </a>
+        <a href="#" class="footer-link">
+          <i class="fas fa-download"></i> Baixar Horários
+        </a>
+      </div>
+      
+      <p style="margin-top: 30px;">© 2025 CFM - Caminhos de Ferro de Moçambique</p>
+      <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 10px;">
+        <i class="fas fa-train"></i> Sistema de Informações Ferroviárias • Dados
+        actualizados conforme fontes CFM
+      </p>
+      <p style="color: var(--cfm-cyan); margin-top: 20px; font-size: 0.8rem;">
+        <i class="fas fa-code"></i> Developed by Benjanuário • Stunner System
+      </p>
+      <p style="color: var(--text-dim); margin-top: 10px; font-size: 0.8rem;">
+        <i class="fas fa-exclamation-circle"></i> Nota: Distâncias são aproximações baseadas em horários históricos. Valores oficiais podem variar.
+      </p>
+    </footer>
   </div>
 
   <script>
-    // 🔗 URL do novo GAS (só para dados estáticos)
-    const GAS_STATIC = "https://script.google.com/macros/s/NOVO_CODIGO/exec";
-    let estacoes = [];
+    // Animação das estações
+    document.addEventListener('DOMContentLoaded', function() {
+      // Animação dos cards de estatísticas
+      const statCards = document.querySelectorAll('.stat-card');
+      statCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          card.style.transition = 'all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 500 + (index * 100));
+      });
 
-    async function carregarEstacoes() {
-      try {
-        const res = await fetch(`${GAS_STATIC}?action=estacoes`);
-        estacoes = await res.json();
-        
-        const origem = document.getElementById('origem');
-        const destino = document.getElementById('destino');
-        origem.innerHTML = '';
-        destino.innerHTML = '';
-        
-        estacoes.forEach(e => {
-          origem.innerHTML += `<option value="${e.estacao}">${e.estacao}</option>`;
-          destino.innerHTML += `<option value="${e.estacao}">${e.estacao}</option>`;
+      // Animação das estações
+      const stationCards = document.querySelectorAll('.station-card');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
         });
+      }, { threshold: 0.1 });
 
-        // Mostrar lista
-        const lista = document.getElementById('lista-estacoes');
-        lista.innerHTML = estacoes.map(e => 
-          `<div class="estacao-item"><span>${e.estacao}</span><span>${e.km} km</span></div>`
-        ).join('');
-      } catch (e) {
-        console.error(e);
-        document.getElementById('lista-estacoes').innerHTML = '<p>Erro ao carregar estações.</p>';
+      stationCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+        card.style.transitionDelay = `${(index % 10) * 0.05}s`;
+        observer.observe(card);
+      });
+
+      // Contador animado para estatísticas
+      const statNumbers = document.querySelectorAll('.stat-number');
+      statNumbers.forEach(stat => {
+        const finalValue = parseInt(stat.textContent);
+        let currentValue = 0;
+        const increment = finalValue / 50;
+        const duration = 2000;
+        const stepTime = duration / 50;
+        
+        const timer = setInterval(() => {
+          currentValue += increment;
+          if (currentValue >= finalValue) {
+            currentValue = finalValue;
+            clearInterval(timer);
+          }
+          stat.textContent = Math.floor(currentValue);
+        }, stepTime);
+      });
+
+      // Destacar estações principais no hover
+      const primaryStations = document.querySelectorAll('.station-card.primary');
+      primaryStations.forEach(station => {
+        station.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-10px) scale(1.02)';
+          this.style.boxShadow = '0 0 30px rgba(255, 46, 99, 0.6)';
+        });
+        
+        station.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0) scale(1)';
+          this.style.boxShadow = 'var(--glow)';
+        });
+      });
+    });
+
+    // Efeito de digitação no subtítulo
+    const subtitle = document.querySelector('.subtitle');
+    if (subtitle) {
+      const text = subtitle.textContent;
+      subtitle.textContent = '';
+      
+      let i = 0;
+      function typeWriter() {
+        if (i < text.length) {
+          subtitle.textContent += text.charAt(i);
+          i++;
+          setTimeout(typeWriter, 50);
+        }
       }
+      
+      setTimeout(typeWriter, 1000);
     }
 
-    function calcularRota() {
-      const origem = document.getElementById('origem').value;
-      const destino = document.getElementById('destino').value;
-      if (origem === destino) {
-        alert("Selecione estações diferentes!");
-        return;
-      }
-
-      const estOrigem = estacoes.find(e => e.estacao === origem);
-      const estDestino = estacoes.find(e => e.estacao === destino);
-      if (!estOrigem || !estDestino) return;
-
-      const dist = Math.abs(estDestino.km - estOrigem.km);
-      const tempoMin = Math.abs(estDestino.tempo - estOrigem.tempo);
-      const horas = Math.floor(tempoMin / 60);
-      const minutos = tempoMin % 60;
-
-      document.getElementById('resultado').innerHTML = `
-        <h4>${origem} → ${destino}</h4>
-        <p><strong>Distância:</strong> ${dist} km</p>
-        <p><strong>Tempo estimado:</strong> ${horas}h ${minutos}m</p>
-      `;
-      document.getElementById('resultado').style.display = 'block';
-    }
-
-    // Iniciar
-    carregarEstacoes();
+    // Mostrar/ocultar detalhes das estações
+    document.querySelectorAll('.station-card').forEach(card => {
+      card.addEventListener('click', function() {
+        const details = this.querySelector('.station-details');
+        if (details.style.maxHeight && details.style.maxHeight !== '0px') {
+          details.style.maxHeight = '0';
+          details.style.opacity = '0';
+        } else {
+          details.style.maxHeight = details.scrollHeight + 'px';
+          details.style.opacity = '1';
+        }
+      });
+    });
   </script>
 </body>
 </html>
