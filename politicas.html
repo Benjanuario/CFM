@@ -3,36 +3,709 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Política de Privacidade - CFM</title>
+  <title>Política de Privacidade - CFM Atualizações</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    body { font-family: 'Roboto', sans-serif; background: #fff; padding: 20px; max-width: 600px; margin: 0 auto; }
-    header { background: #0d47a1; color: white; padding: 16px; text-align: center; margin-bottom: 20px; border-radius: 10px; }
-    .back-btn { position: absolute; left: 20px; background: none; border: none; color: white; font-size: 1.4rem; }
-    .content { padding: 20px; background: #e8f5e8; border-radius: 10px; }
-    h2 { color: #2e7d32; margin-bottom: 15px; }
-    ul { padding-left: 20px; margin: 15px 0; }
-    li { margin-bottom: 8px; line-height: 1.5; }
-    .highlight { background: #c8e6c9; padding: 2px 6px; border-radius: 4px; }
+    :root {
+      --cfm-blue: #0d47a1;
+      --cfm-light: #e3f2fd;
+      --text-dark: #222;
+      --text-light: #555;
+      --border: #ddd;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+      --success: #2e7d32;
+      --warning: #f57c00;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: #f5f7fa;
+      color: var(--text-dark);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 40px;
+      margin-top: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--cfm-light);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .logo-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--cfm-blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.8rem;
+    }
+
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--cfm-blue);
+    }
+
+    h1 {
+      color: var(--cfm-blue);
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .compliance-badge {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
+    }
+
+    .badge {
+      background: var(--cfm-light);
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge i {
+      color: var(--cfm-blue);
+    }
+
+    .badge.gdpr {
+      background: #e8f5e9;
+      border-left: 4px solid var(--success);
+    }
+
+    .badge.gdpr i {
+      color: var(--success);
+    }
+
+    .section {
+      margin-bottom: 40px;
+      padding: 25px;
+      background: #f9f9f9;
+      border-radius: 10px;
+    }
+
+    h2 {
+      color: var(--cfm-blue);
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--cfm-light);
+    }
+
+    h2 i {
+      font-size: 1.4rem;
+    }
+
+    h3 {
+      color: var(--text-dark);
+      font-size: 1.2rem;
+      margin: 25px 0 15px 0;
+      padding-left: 15px;
+      border-left: 3px solid var(--cfm-blue);
+    }
+
+    p {
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+
+    ul {
+      margin: 15px 0 15px 30px;
+    }
+
+    li {
+      margin-bottom: 10px;
+      padding-left: 10px;
+    }
+
+    .data-types {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .data-card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .data-card h4 {
+      color: var(--cfm-blue);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .data-card ul {
+      margin-left: 20px;
+      font-size: 0.9rem;
+    }
+
+    .data-flow {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 4px solid var(--cfm-blue);
+    }
+
+    .flow-step {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: white;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .step-number {
+      width: 30px;
+      height: 30px;
+      background: var(--cfm-blue);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+
+    .rights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .right-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .right-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--cfm-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      font-size: 1.3rem;
+      color: var(--cfm-blue);
+    }
+
+    .right-card h4 {
+      color: var(--cfm-blue);
+      margin-bottom: 10px;
+    }
+
+    .security-measures {
+      background: #e8f5e9;
+      padding: 25px;
+      border-radius: 10px;
+      margin: 30px 0;
+      border-left: 4px solid var(--success);
+    }
+
+    .measure {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 15px;
+      padding: 10px;
+      background: white;
+      border-radius: 6px;
+    }
+
+    .measure i {
+      color: var(--success);
+      margin-right: 10px;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .contact-box {
+      background: var(--cfm-light);
+      padding: 30px;
+      border-radius: 10px;
+      margin-top: 30px;
+    }
+
+    .contact-box h3 {
+      border: none;
+      padding-left: 0;
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+    }
+
+    .contact-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--cfm-blue);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+
+    .back-button {
+      display: inline-block;
+      background: var(--cfm-blue);
+      color: white;
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 6px;
+      margin-top: 30px;
+      font-weight: 500;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .back-button:hover {
+      background: #0a3d8a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(13, 71, 161, 0.2);
+    }
+
+    .back-button i {
+      margin-right: 8px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .consent-toggle {
+      background: #fff3e0;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .toggle-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .toggle-btn {
+      padding: 8px 20px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .toggle-btn.active {
+      background: var(--cfm-blue);
+      color: white;
+      border-color: var(--cfm-blue);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      h2 {
+        font-size: 1.4rem;
+      }
+      
+      .section {
+        padding: 15px;
+      }
+      
+      .data-types {
+        grid-template-columns: 1fr;
+      }
+      
+      .consent-toggle {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <button class="back-btn" onclick="history.back()">←</button>
-    <h1><i class="fas fa-shield-alt"></i> Política de Privacidade</h1>
-  </header>
-  <div class="content">
-    <h2>Nosso Compromisso com a Sua Privacidade</h2>
-    <ul>
-      <li><span class="highlight">Não coletamos dados pessoais</span> como nome, telefone, e-mail ou localização.</li>
-      <li>Seu nome no chat é <span class="highlight">gerado automaticamente</span> (ex: Passageiro_842) e <strong>não está vinculado à sua identidade real</strong>.</li>
-      <li>As mensagens do chat são <span class="highlight">armazenadas temporariamente</span> e <strong>apagadas após 96 horas</strong>.</li>
-      <li>Não usamos <strong>cookies, rastreamento ou análise comportamental</strong>.</li>
-      <li>As actualizações oficiais <strong>não contêm dados dos administradores</strong> além do nome exibido.</li>
-      <li>Este sistema <strong>não partilha informações com terceiros</strong>, incluindo redes sociais.</li>
-    </ul>
-    <p><em>Privacidade é um direito. Transparência é nosso dever.</em></p>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="logo-text">Política de Privacidade CFM</div>
+      </div>
+      <h1>Proteção de Dados e Privacidade</h1>
+      <p class="subtitle">Esta política descreve como a CFM coleta, usa, protege e compartilha informações no Sistema de Atualizações em Tempo Real</p>
+      
+      <div class="compliance-badge">
+        <div class="badge">
+          <i class="fas fa-check-circle"></i>
+          <span>Lei de Proteção de Dados Pessoais nº 58/2023</span>
+        </div>
+        <div class="badge gdpr">
+          <i class="fas fa-globe-europe"></i>
+          <span>Princípios GDPR Compatíveis</span>
+        </div>
+        <div class="badge">
+          <i class="fas fa-lock"></i>
+          <span>Encriptação de Ponta a Ponta</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><i class="fas fa-info-circle"></i> 1. Informações que Coletamos</h2>
+      <p>A CFM está comprometida com a transparência na coleta de dados. Coletamos apenas informações necessárias para o funcionamento do serviço:</p>
+      
+      <div class="data-types">
+        <div class="data-card">
+          <h4><i class="fas fa-user-circle"></i> Dados Não-Pessoais</h4>
+          <ul>
+            <li>Nome de utilizador gerado automaticamente</li>
+            <li>Região de acesso (cidade/província)</li>
+            <li>Tipo de dispositivo e navegador</li>
+            <li>Horário de acesso</li>
+            <li>Preferências de idioma</li>
+          </ul>
+        </div>
+        
+        <div class="data-card">
+          <h4><i class="fas fa-comment"></i> Conteúdo Gerado</h4>
+          <ul>
+            <li>Mensagens enviadas no chat</li>
+            <li>Interações com atualizações</li>
+            <li>Preferências de notificação</li>
+            <li>Configurações salvas localmente</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="data-flow">
+        <h3>Fluxo de Dados</h3>
+        <div class="flow-step">
+          <div class="step-number">1</div>
+          <div>Geração automática de identificador anônimo</div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number">2</div>
+          <div>Armazenamento local no seu dispositivo</div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number">3</div>
+          <div>Transmissão encriptada para servidores seguros (Firebase / Google
+          App Script</div>
+        </div>
+        <div class="flow-step">
+          <div class="step-number">4</div>
+          <div>Processamento anonimizado para estatísticas</div>
+        </div>
+      </div>
+      
+      <div class="warning" style="background: #fff3e0; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #f57c00;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div><strong>Importante:</strong> Não coletamos dados pessoais sensíveis
+        como BI, NUIT, NIB, endereços ou informações financeiras.
+        Seus dados de navegação são anonimizados.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><i class="fas fa-bullseye"></i> 2. Finalidade do Tratamento</h2>
+      <p>Utilizamos os dados coletados exclusivamente para:</p>
+      
+      <h3>2.1. Funcionalidade do Serviço</h3>
+      <ul>
+        <li>Fornecer actualizações em tempo real sobre horários</li>
+        <li>Facilitar comunicação entre passageiros/usuários</li>
+        <li>Personalizar a experiência de uso</li>
+        <li>Manter histórico de mensagens no chat</li>
+      </ul>
+      
+      <h3>2.2. Melhoria do Serviço</h3>
+      <ul>
+        <li>Análise estatística anônima de uso</li>
+        <li>Identificação de problemas técnicos</li>
+        <li>Otimização de performance</li>
+        <li>Desenvolvimento de novas funcionalidades</li>
+      </ul>
+      
+      <h3>2.3. Segurança</h3>
+      <ul>
+        <li>Prevenção de abuso e fraudes</li>
+        <li>Detecção de actividades suspeitas</li>
+        <li>Proteção da integridade do sistema</li>
+        <li>Cumprimento de obrigações legais</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2><i class="fas fa-share-alt"></i> 3. Compartilhamento de Dados</h2>
+      <p>A CFM não comercializa, aluga ou compartilha seus dados com terceiros para marketing. O compartilhamento ocorre apenas      somente nas seguintes situações:</p>
+      
+      <h3>3.1. Quando for necessário adicionar os números de telefone a um grupo
+      de WhatsApp (quando necessário)</h3>
+      <ul>
+        <li><strong>Análise de dados:</strong> Ferramentas de analytics anonimizados</li>
+      </ul>
+    </div>
+
+    
+        <div class="right-card">
+          <div class="right-icon">
+            <i class="fas fa-trash-alt"></i>
+          </div>
+          <h4>Exclusão</h4>
+          <p>Solicitar a eliminação dos seus dados (nome e número)</p>
+        </div>
+        
+        <div class="right-card">
+          <div class="right-icon">
+            <i class="fas fa-ban"></i>
+          </div>
+          <h4>Oposição</h4>
+          <p>Opor-se ao tratamento em certas circunstâncias</p>
+        </div>
+        
+        <div class="right-card">
+          <div class="right-icon">
+            <i class="fas fa-file-export"></i>
+          </div>
+          <h4>Certificaçãp</h4>
+          <p>ser informado sobre a conclusão da eliminação dos seus dados</p>
+        </div>
+        
+        <div class="right-card">
+          <div class="right-icon">
+            <i class="fas fa-comment-slash"></i>
+          </div>
+          <h4>Revogação</h4>
+          <p>Retirar consentimento a qualquer momento</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><i class="fas fa-lock"></i> 5. Medidas de Segurança</h2>
+      <p>Implementamos medidas técnicas e organizacionais robustas para proteger seus dados:</p>
+      
+      <div class="security-measures">
+        <div class="measure">
+          <i class="fas fa-check-circle"></i>
+          <div><strong>Encriptação SSL/TLS:</strong> Todas as comunicações são encriptadas em trânsito</div>
+        </div>
+        
+        <div class="measure">
+          <i class="fas fa-check-circle"></i>
+          <div><strong>Armazenamento Seguro:</strong> Dados armazenados em
+          servidores com certificação do Google /Firebase Hosting</div>
+        </div>
+        
+        <div class="measure">
+          <i class="fas fa-check-circle"></i>
+          <div><strong>Acesso Restrito:</strong> Apenas pessoal autorizado tem acesso aos dados</div>
+        </div>
+        
+        <div class="measure">
+          <i class="fas fa-check-circle"></i>
+          <div><strong>Backups Regulares:</strong> Cópias de segurança diárias com retenção controlada</div>
+        </div>
+        
+        <div class="measure">
+          <i class="fas fa-check-circle"></i>
+          <div><strong>Monitoramento Contínuo:</strong> Os dados são monitorados
+          para evitar a perda sem BackUp</div>
+        </div>
+        
+        <div class="measure">
+          <i class="fas fa-check-circle"></i>
+          <div><strong>Pseudonimização:</strong> Dados são anonimizados sempre que possível</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><i class="fas fa-calendar-alt"></i> 8. Retenção de Dados</h2>
+      <p>Mantemos seus dados apenas pelo tempo necessário:</p>
+      
+      <h3>8.1. Períodos de Retenção</h3>
+      <ul>
+        <li><strong>Dados de actividade:</strong> 30 dias</li>
+        <li><strong>Logs de acesso:</strong> 30 dias</li>
+        <li><strong>Mensagens de chat:</strong> 94 horas</li>
+        <li><strong>Dados anonimizados:</strong> Indefinido (para estatísticas)</li>
+      </ul>
+      
+      <h3>8.2. Critérios de Eliminação</h3>
+      <ul>
+        <li>Cumprimento do prazo de retenção</li>
+        <li>Solicitação do titular</li>
+        <li>Encerramento da conta</li>
+        <li>Finalidade alcançada</li>
+      </ul>
+    </div>
+
+    <div class="contact-box">
+      <h3>Exercer Seus Direitos ou Dúvidas</h3>
+      <p>Para solicitar acesso, correção ou exclusão de dados, entre em contacto:</p>
+      
+      <div class="contact-grid">
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <h4>Email Oficial</h4>
+          <p>entre em contacto com administradores do Grupo do WhatsApp</p>
+          <small>Resposta em até 7 dias úteis</small>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <h4>Correspondência</h4>
+          <p>CFM - Administradores do Grupo do WhatsApp<br> Comboio
+          Beira/Moatize</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><i class="fas fa-file-contract"></i> 9. Alterações a Esta Política</h2>
+      <p>Esta política pode ser actualizada periodicamente. Notificaremos sobre mudanças significativas:</p>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <button class="back-button" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i> Voltar ao Sistema
+      </button>
+      <button class="back-button" onclick="window.print()" style="margin-left: 15px; background: var(--text-light);">
+        <i class="fas fa-print"></i> Imprimir Política
+      </button>
+    </div>
+
+    <div class="footer">
+      <p>© 2024 CFM - Caminhos de Ferro de Moçambique. Todos os direitos reservados.</p>
+      <p>Documento elaborado para Proteção de Dados Pessoais / Logs)</p>
+      <p style="margin-top: 10px; font-size: 0.8rem;">
+        <i class="fas fa-clock"></i> Última revisão: 13/12/2025 14:30 | 
+        <i class="fas fa-user-check"></i> Aprovado por: Administradores dos
+        Grupos de WhatsApp</p>
+    </div>
   </div>
+
+  <script>
+
+    // Simulação de impressão melhorada
+    const printButton = document.querySelector('button[onclick*="print"]');
+    printButton.addEventListener('click', function(e) {
+      // Em uma implementação real, você poderia adicionar estilos específicos para impressão
+      console.log('Preparando versão para impressão...');
+      // window.print() já está sendo chamado pelo onclick
+    });
+
+    // Data de atualização automática no footer
+    document.addEventListener('DOMContentLoaded', function() {
+      const lastUpdated = document.querySelector('.footer p:nth-child(3)');
+      if (lastUpdated) {
+        const now = new Date();
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+        lastUpdated.innerHTML = `<i class="fas fa-clock"></i> Última visualização: ${now.toLocaleDateString('pt-MZ', options)} | <i class="fas fa-user-check"></i> Aprovado por: Direção de TI - CFM`;
+      }
+    });
+  </script>
 </body>
 </html>

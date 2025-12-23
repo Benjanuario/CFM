@@ -2,38 +2,484 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <meta name=" viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Termos de Uso - CFM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Termos de Uso - CFM Atualizações</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    body { font-family: 'Roboto', sans-serif; background: #fff; padding: 20px; max-width: 600px; margin: 0 auto; }
-    header { background: #0d47a1; color: white; padding: 16px; text-align: center; margin-bottom: 20px; border-radius: 10px; }
-    .back-btn { position: absolute; left: 20px; background: none; border: none; color: white; font-size: 1.4rem; }
-    .content { padding: 20px; background: #fff8e1; border-radius: 10px; }
-    h2 { color: #e65100; margin-bottom: 15px; }
-    ul { padding-left: 20px; margin: 15px 0; }
-    li { margin-bottom: 8px; line-height: 1.5; }
-    .highlight { background: #ffe0b2; padding: 2px 6px; border-radius: 4px; }
+    :root {
+      --cfm-blue: #0d47a1;
+      --cfm-light: #e3f2fd;
+      --text-dark: #222;
+      --text-light: #555;
+      --border: #ddd;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: #fff;
+      color: var(--text-dark);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 40px;
+      margin-top: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--cfm-light);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .logo-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--cfm-blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.8rem;
+    }
+
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--cfm-blue);
+    }
+
+    h1 {
+      color: var(--cfm-blue);
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+
+    .last-update {
+      background: var(--cfm-light);
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+
+    .last-update i {
+      color: var(--cfm-blue);
+    }
+
+    .section {
+      margin-bottom: 40px;
+      padding: 25px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      border-left: 4px solid var(--cfm-blue);
+    }
+
+    h2 {
+      color: var(--cfm-blue);
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2 i {
+      font-size: 1.4rem;
+    }
+
+    h3 {
+      color: var(--text-dark);
+      font-size: 1.2rem;
+      margin: 25px 0 15px 0;
+      padding-left: 15px;
+      border-left: 3px solid var(--cfm-blue);
+    }
+
+    p {
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 15px 0 15px 30px;
+    }
+
+    li {
+      margin-bottom: 10px;
+      padding-left: 10px;
+    }
+
+    .highlight {
+      background: var(--cfm-light);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 3px solid var(--cfm-blue);
+    }
+
+    .warning {
+      background: #fff3e0;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 3px solid #f57c00;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .warning i {
+      color: #f57c00;
+      font-size: 1.2rem;
+      margin-top: 2px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    th {
+      background: var(--cfm-blue);
+      color: white;
+      padding: 12px;
+      text-align: left;
+      font-weight: 500;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+
+    .contact-info {
+      background: var(--cfm-light);
+      padding: 25px;
+      border-radius: 10px;
+      margin-top: 30px;
+    }
+
+    .contact-info h3 {
+      border: none;
+      padding-left: 0;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .contact-item i {
+      color: var(--cfm-blue);
+      width: 20px;
+    }
+
+    .back-button {
+      display: inline-block;
+      background: var(--cfm-blue);
+      color: white;
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 6px;
+      margin-top: 30px;
+      font-weight: 500;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .back-button:hover {
+      background: #0a3d8a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(13, 71, 161, 0.2);
+    }
+
+    .back-button i {
+      margin-right: 8px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      h2 {
+        font-size: 1.4rem;
+      }
+      
+      .section {
+        padding: 15px;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <button class="back-btn" onclick="history.back()">←</button>
-    <h1><i class="fas fa-file-contract"></i> Termos de Uso</h1>
-  </header>
-  <div class="content">
-    <h2>Termos de Utilização do Sistema CFM</h2>
-    <p>Ao acessar este sistema, você concorda com os seguintes termos:</p>
-    <ul>
-      <li>As <span class="highlight">actualizações oficiais</span> são enviadas <strong>exclusivamente pela administração da CFM</strong>. Qualquer outra informação deve ser considerada não oficial.</li>
-      <li>O <span class="highlight">chat é anônimo</span> e destinado à troca de experiências entre passageiros. <strong>Não é canal oficial de suporte</strong>.</li>
-      <li>É proibido enviar mensagens com: <strong>conteúdo ofensivo, falso, enganoso ou que incite pânico</strong>.</li>
-      <li>A <span class="highlight">CFM não se responsabiliza</span> por decisões tomadas com base em informações do chat.</li>
-      <li>Este serviço é <strong>gratuito, sem fins lucrativos</strong> e fornecido “como está”.</li>
-      <li>A administração da CFM pode <strong>remover, editar ou ocultar</strong> qualquer conteúdo a qualquer momento, sem aviso prévio.</li>
-    </ul>
-    <p><em>Última atualização: 23 de Dezembro de 2025</em></p>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-train"></i>
+        </div>
+        <div class="logo-text">CFM - Caminhos de Ferro de Moçambique</div>
+      </div>
+      <h1>Termos e Condições de Uso</h1>
+      <p class="subtitle">Sistema de Atualizações em Tempo Real - Linha Beira-Moatize</p>
+      
+      <div class="last-update">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Última atualização: 15 de Março de 2024</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><i class="fas fa-file-contract"></i> 1. Aceitação dos Termos</h2>
+      <p>Ao aceder e utilizar o Sistema de Atualizações em Tempo Real da CFM para a linha Beira-Moatize, você declara que leu, compreendeu e aceita integralmente estes Termos e Condições de Uso. Se não concordar com qualquer parte destes termos, deve imediatamente cessar a utilização do serviço.</p>
+      
+      <div class="highlight">
+        <p><strong>Importante:</strong> Estes termos constituem um contrato vinculativo entre você e a Caminhos de Ferro de Moçambique (CFM). A utilização contínua do serviço implica aceitação de quaisquer alterações futuras.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><i class="fas fa-user-check"></i> 2. Elegibilidade para Uso</h2>
+      <p>Para utilizar este serviço, você deve:</p>
+      <ul>
+        <li>Ter pelo menos 18 anos de idade ou estar sob supervisão de um responsável legal</li>
+        <li>Ser passageiro, familiar de passageiro ou ter interesse legítimo no serviço ferroviário Beira-Moatize</li>
+        <li>Possuir capacidade legal para celebrar contratos em Moçambique</li>
+        <li>Não estar impedido judicialmente de utilizar serviços públicos</li>
+      </ul>
+      
+      <div class="warning">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div>A CFM reserva-se o direito de restringir ou cancelar o acesso a usuários que violem estes termos ou utilizem o serviço de forma inadequada.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><i class="fas fa-comments"></i> 3. Regras de Conduta no Chat</h2>
+      <p>O chat de passageiros tem como objetivo facilitar a comunicação entre utilizadores. São estritamente proibidas:</p>
+      
+      <h3>3.1. Condutas Inaceitáveis</h3>
+      <ul>
+        <li><strong>Mensagens ofensivas:</strong> Linguagem abusiva, discriminação, assédio ou ameaças</li>
+        <li><strong>Informações falsas:</strong> Divulgação de informações enganosas sobre horários, tarifas ou segurança</li>
+        <li><strong>Spam:</strong> Mensagens repetitivas, propagandas comerciais ou links não autorizados</li>
+        <li><strong>Conteúdo ilegal:</strong> Apologia à violência, incitação ao ódio ou conteúdo pornográfico</li>
+        <li><strong>Dados pessoais:</strong> Compartilhamento de informações privadas de terceiros</li>
+      </ul>
+
+      <h3>3.2. Sanções por Violação</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo de Violação</th>
+              <th>Primeira Ocorrência</th>
+              <th>Reincidência</th>
+              <th>Grave</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Linguagem Inadequada</td>
+              <td>Aviso</td>
+              <td>Suspensão 24h</td>
+              <td>Suspensão 7 dias</td>
+            </tr>
+            <tr>
+              <td>Informações Falsas</td>
+              <td>Suspensão 24h</td>
+              <td>Suspensão 7 dias</td>
+              <td>Bloqueio Permanente</td>
+            </tr>
+            <tr>
+              <td>Spam/Propaganda</td>
+              <td>Suspensão 48h</td>
+              <td>Suspensão 30 dias</td>
+              <td>Bloqueio Permanente</td>
+            </tr>
+            <tr>
+              <td>Conteúdo Ilegal</td>
+              <td>Bloqueio Imediato</td>
+              <td>N/A</td>
+              <td>Denúncia às Autoridades</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2><i class="fas fa-shield-alt"></i> 4. Responsabilidades e Isenções</h2>
+      
+      <h3>4.1. Informações Oficiais vs. Não Oficiais</h3>
+      <ul>
+        <li><strong>Atualizações Oficiais:</strong> Mensagens publicadas pela Administração CFM são verificadas e vinculativas</li>
+        <li><strong>Chat dos Passageiros:</strong> Mensagens entre usuários são de responsabilidade exclusiva dos emissores</li>
+        <li><strong>Verificação:</strong> Sempre confirme informações importantes através dos canais oficiais da CFM</li>
+      </ul>
+
+      <h3>4.2. Limitação de Responsabilidade</h3>
+      <p>A CFM não será responsável por:</p>
+      <ol>
+        <li>Danos decorrentes de informações não oficiais compartilhadas no chat</li>
+        <li>Interrupções temporárias do serviço por motivos técnicos</li>
+        <li>Decisões tomadas com base em informações do sistema sem confirmação oficial</li>
+        <li>Conteúdo gerado por usuários que viole estes termos</li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h2><i class="fas fa-gavel"></i> 5. Propriedade Intelectual</h2>
+      <p>Todo o conteúdo, design, logotipos e software deste sistema são propriedade exclusiva da CFM ou de seus licenciadores. É estritamente proibido:</p>
+      <ul>
+        <li>Copiar, reproduzir ou distribuir o conteúdo sem autorização</li>
+        <li>Modificar, descompilar ou realizar engenharia reversa do sistema</li>
+        <li>Utilizar marcas ou logotipos da CFM para fins comerciais</li>
+        <li>Criar sistemas derivados baseados nesta plataforma</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2><i class="fas fa-balance-scale"></i> 6. Resolução de Disputas</h2>
+      <p>Qualquer disputa relacionada a estes termos será resolvida:</p>
+      
+      <h3>6.1. Mediação Obrigatória</h3>
+      <p>Antes de qualquer ação judicial, as partes concordam em tentar resolver disputas através de mediação conduzida pelo Conselho de Mediação de Moçambique.</p>
+      
+      <h3>6.2. Foro Competente</h3>
+      <p>As ações judiciais serão processadas no foro da cidade da Beira, Moçambique, sendo aplicada a legislação moçambicana.</p>
+      
+      <h3>6.3. Notificações</h3>
+      <p>Comunicações oficiais devem ser enviadas para o endereço da sede da CFM em Maputo ou através do email legal@cfm.co.mz.</p>
+    </div>
+
+    <div class="contact-info">
+      <h3><i class="fas fa-headset"></i> Contactos para Dúvidas sobre os Termos</h3>
+      <div class="contact-item">
+        <i class="fas fa-envelope"></i>
+        <span>legal@cfm.co.mz</span>
+      </div>
+      <div class="contact-item">
+        <i class="fas fa-phone"></i>
+        <span>+258 23 320 000 (Departamento Jurídico)</span>
+      </div>
+      <div class="contact-item">
+        <i class="fas fa-clock"></i>
+        <span>Segunda a Sexta: 08:00 - 15:30</span>
+      </div>
+      <div class="contact-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>Av. 25 de Setembro, 1381 - Maputo, Moçambique</span>
+      </div>
+    </div>
+
+    <div style="text-align: center;">
+      <button class="back-button" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i> Voltar ao Sistema
+      </button>
+      <p style="margin-top: 15px; font-size: 0.9rem; color: var(--text-light);">
+        <i class="fas fa-print"></i> Recomendamos guardar uma cópia destes termos para referência futura.
+      </p>
+    </div>
+
+    <div class="footer">
+      <p>© 2024 Caminhos de Ferro de Moçambique (CFM). Todos os direitos reservados.</p>
+      <p>Documento TEC-CFM-2024-001 | Versão 2.1</p>
+    </div>
   </div>
+
+  <script>
+    // Salvar aceitação dos termos no localStorage
+    function acceptTerms() {
+      localStorage.setItem('cfm_terms_accepted', 'true');
+      localStorage.setItem('cfm_terms_accepted_date', new Date().toISOString());
+      localStorage.setItem('cfm_terms_version', '2.1');
+      window.history.back();
+    }
+
+    // Verificar se já aceitou os termos
+    document.addEventListener('DOMContentLoaded', () => {
+      const termsAccepted = localStorage.getItem('cfm_terms_accepted');
+      const termsVersion = localStorage.getItem('cfm_terms_version');
+      
+      if (termsAccepted && termsVersion === '2.1') {
+        // Adicionar badge de termos aceitos
+        const header = document.querySelector('.header');
+        if (header) {
+          const acceptedBadge = document.createElement('div');
+          acceptedBadge.className = 'last-update';
+          acceptedBadge.style.background = '#e8f5e9';
+          acceptedBadge.style.borderLeft = '4px solid #4caf50';
+          acceptedBadge.innerHTML = `
+            <i class="fas fa-check-circle" style="color: #4caf50;"></i>
+            <span>Você aceitou estes termos em ${new Date(localStorage.getItem('cfm_terms_accepted_date')).toLocaleDateString('pt-MZ')}</span>
+          `;
+          header.appendChild(acceptedBadge);
+        }
+      }
+    });
+  </script>
 </body>
 </html>

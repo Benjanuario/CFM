@@ -3,29 +3,1032 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sobre - CFM Atualizações</title>
+  <title>Sobre o Sistema - CFM Atualizações</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    body { font-family: 'Roboto', sans-serif; background: #fff; padding: 20px; max-width: 600px; margin: 0 auto; }
-    header { background: #0d47a1; color: white; padding: 16px; text-align: center; margin-bottom: 20px; border-radius: 10px; }
-    .back-btn { position: absolute; left: 20px; background: none; border: none; color: white; font-size: 1.4rem; }
-    .content { padding: 20px; background: #f8fbff; border-radius: 10px; }
-    h2 { color: #0d47a1; margin-bottom: 15px; }
-    p { line-height: 1.6; margin-bottom: 12px; }
+    :root {
+      --cfm-blue: #0d47a1;
+      --cfm-red: #c62828;
+      --cfm-light: #e3f2fd;
+      --cfm-yellow: #ffd600;
+      --cfm-green: #2e7d32;
+      --text-dark: #222;
+      --text-light: #555;
+      --border: #ddd;
+      --shadow: 0 2px 15px rgba(0,0,0,0.1);
+      --gradient: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e3f2fd 100%);
+      color: var(--text-dark);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header e Navegação */
+    .header {
+      background: white;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      padding: 25px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 70px;
+      height: 70px;
+      background: var(--gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      box-shadow: 0 4px 12px rgba(13, 71, 161, 0.3);
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-text h1 {
+      color: var(--cfm-blue);
+      font-size: 1.8rem;
+      margin: 0;
+    }
+
+    .logo-text span {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      padding: 10px 20px;
+      border-radius: 25px;
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 500;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-link:hover {
+      background: var(--cfm-light);
+      color: var(--cfm-blue);
+    }
+
+    .nav-link.active {
+      background: var(--cfm-blue);
+      color: white;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: var(--gradient);
+      color: white;
+      border-radius: 15px;
+      padding: 50px;
+      margin-bottom: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+      background-size: cover;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto 25px;
+      position: relative;
+      z-index: 1;
+      opacity: 0.95;
+    }
+
+    .hero-tags {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tag {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Conteúdo Principal */
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 35px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--cfm-light);
+    }
+
+    .card-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--cfm-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cfm-blue);
+      font-size: 1.5rem;
+    }
+
+    .card-title {
+      color: var(--cfm-blue);
+      font-size: 1.8rem;
+      margin: 0;
+    }
+
+    /* Missão e Valores */
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .mission-item {
+      background: #f8fafc;
+      padding: 25px;
+      border-radius: 10px;
+      border-left: 4px solid var(--cfm-blue);
+      transition: all 0.3s;
+    }
+
+    .mission-item:hover {
+      background: white;
+      border-left-color: var(--cfm-green);
+      transform: translateX(5px);
+    }
+
+    .mission-item h4 {
+      color: var(--cfm-blue);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Características */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .feature {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      background: #f8fafc;
+      border-radius: 10px;
+      transition: all 0.3s;
+    }
+
+    .feature:hover {
+      background: var(--cfm-light);
+      transform: translateY(-3px);
+    }
+
+    .feature-icon {
+      width: 50px;
+      height: 50px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cfm-blue);
+      font-size: 1.3rem;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      flex-shrink: 0;
+    }
+
+    .feature-content h4 {
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+
+    /* Rota */
+    .route-map {
+      background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
+      border-radius: 10px;
+      padding: 25px;
+      color: white;
+      margin: 25px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .route-map::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,50 Q25,40 50,50 T100,50 V100 H0 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+    }
+
+    .route-stations {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+      margin: 20px 0;
+    }
+
+    .station {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .station-dot {
+      width: 16px;
+      height: 16px;
+      background: white;
+      border-radius: 50%;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .station-dot::after {
+      content: '';
+      position: absolute;
+      width: 150px;
+      height: 2px;
+      background: rgba(255,255,255,0.3);
+      top: 7px;
+      left: 16px;
+    }
+
+    .station:last-child .station-dot::after {
+      display: none;
+    }
+
+    /* Equipe */
+    .team-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 15px;
+      padding: 35px;
+      margin-top: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+      transform: rotate(30deg);
+    }
+
+    .team-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .developer-avatar {
+      width: 120px;
+      height: 120px;
+      background: white;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--cfm-blue);
+      border: 5px solid rgba(255,255,255,0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .developer-name {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    .developer-title {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .social-link {
+      width: 45px;
+      height: 45px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      text-decoration: none;
+      transition: all 0.3s;
+      backdrop-filter: blur(5px);
+    }
+
+    .social-link:hover {
+      background: white;
+      color: var(--cfm-blue);
+      transform: translateY(-3px);
+    }
+
+    /* Estatísticas */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .stat {
+      background: var(--cfm-light);
+      padding: 25px;
+      border-radius: 10px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .stat:hover {
+      background: var(--cfm-blue);
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .stat:hover .stat-number {
+      color: white;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--cfm-blue);
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-light);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: var(--cfm-blue);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+
+    .footer-link:hover {
+      color: var(--cfm-red);
+      transform: translateY(-2px);
+    }
+
+    /* Botões */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 30px;
+      background: var(--cfm-blue);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .btn:hover {
+      background: #0a3d8a;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(13, 71, 161, 0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--cfm-blue);
+      color: var(--cfm-blue);
+    }
+
+    .btn-outline:hover {
+      background: var(--cfm-blue);
+      color: white;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .nav-links {
+        justify-content: center;
+      }
+      
+      .hero {
+        padding: 30px 20px;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .card {
+        padding: 25px;
+      }
+      
+      .route-stations {
+        flex-direction: column;
+        gap: 30px;
+      }
+      
+      .station-dot::after {
+        width: 2px;
+        height: 40px;
+        left: 7px;
+        top: 16px;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 1.6rem;
+      }
+      
+      .card-title {
+        font-size: 1.4rem;
+      }
+      
+      .mission-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .btn-group {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <button class="back-btn" onclick="history.back()">←</button>
-    <h1><i class="fas fa-info-circle"></i> Sobre</h1>
-  </header>
-  <div class="content">
-    <h2>Sobre o Sistema de Atualizações CFM</h2>
-    <p>Este sistema foi desenvolvido para fornecer <strong>informações oficiais em tempo real</strong> sobre os comboios de passageiros da linha <strong>Beira – Moatize</strong>, operados pela <strong>CFM - Caminhos de Ferro de Moçambique</strong>.</p>
-    <p>O objetivo é <strong>combater a desinformação</strong>, garantir que os passageiros tenham acesso a dados precisos sobre partidas, chegadas, atrasos, cancelamentos e avisos importantes.</p>
-    <p>Desenvolvido com foco na <strong>transparência, usabilidade e acesso universal</strong>, este sistema é gratuito e não requer login.</p>
-    <p><strong>Stunner System</strong> – Tecnologia ao serviço da mobilidade ferroviária em Moçambique.</p>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-train"></i>
+        </div>
+        <div class="logo-text">
+          <h1>CFM Atualizações</h1>
+          <span>Sistema Oficial de Informações</span>
+        </div>
+      </a>
+      
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link">
+          <i class="fas fa-home"></i> Início
+        </a>
+        <a href="sobre.html" class="nav-link active">
+          <i class="fas fa-info-circle"></i> Sobre
+        </a>
+        <a href="politica.html" class="nav-link">
+          <i class="fas fa-shield-alt"></i> Privacidade
+        </a>
+        <a href="contato.html" class="nav-link">
+          <i class="fas fa-envelope"></i> Contato
+        </a>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>Sobre o Sistema de Atualizações CFM</h1>
+      <p>Este sistema foi desenvolvido para fornecer informações oficiais em tempo real sobre os comboios de passageiros da linha Beira – Moatize, operados pela CFM - Caminhos de Ferro de Moçambique.</p>
+      
+      <div class="hero-tags">
+        <span class="tag"><i class="fas fa-bullseye"></i> Combater desinformação</span>
+        <span class="tag"><i class="fas fa-clock"></i> Tempo real</span>
+        <span class="tag"><i class="fas fa-universal-access"></i> Acesso universal</span>
+        <span class="tag"><i class="fas fa-tag"></i> Totalmente gratuito</span>
+      </div>
+    </section>
+
+    <!-- Missão e Objetivos -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-bullseye"></i>
+        </div>
+        <h2 class="card-title">Missão e Objetivos</h2>
+      </div>
+      
+      <p>O objetivo principal deste sistema é combater a desinformação, garantindo que os passageiros tenham acesso a dados precisos e atualizados sobre os serviços ferroviários da linha Beira-Moatize.</p>
+      
+      <div class="mission-grid">
+        <div class="mission-item">
+          <h4><i class="fas fa-check-circle"></i> Transparência Total</h4>
+          <p>Fornecer informações claras e verificadas diretamente da fonte oficial CFM.</p>
+        </div>
+        
+        <div class="mission-item">
+          <h4><i class="fas fa-user-clock"></i> Atualização em Tempo Real</h4>
+          <p>Informações atualizadas a cada 5 minutos durante o horário de operação.</p>
+        </div>
+        
+        <div class="mission-item">
+          <h4><i class="fas fa-users"></i> Inclusão Digital</h4>
+          <p>Sistema acessível em todos os dispositivos, sem necessidade de login.</p>
+        </div>
+        
+        <div class="mission-item">
+          <h4><i class="fas fa-headset"></i> Suporte à Decisão</h4>
+          <p>Auxiliar os passageiros no planeamento das suas viagens com informação fidedigna.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Características -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <h2 class="card-title">Características do Sistema</h2>
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <div class="feature-content">
+            <h4>Atualização Automática</h4>
+            <p>As informações são atualizadas automaticamente sem necessidade de recarregar a página.</p>
+          </div>
+        </div>
+        
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-comments"></i>
+          </div>
+          <div class="feature-content">
+            <h4>Chat em Tempo Real</h4>
+            <p>Espaço para passageiros trocarem informações e experiências sobre as viagens.</p>
+          </div>
+        </div>
+        
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-bell"></i>
+          </div>
+          <div class="feature-content">
+            <h4>Notificações</h4>
+            <p>Alertas sobre atrasos significativos, cancelamentos ou avisos importantes.</p>
+          </div>
+        </div>
+        
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <div class="feature-content">
+            <h4>Design Responsivo</h4>
+            <p>Funciona perfeitamente em smartphones, tablets e computadores.</p>
+          </div>
+        </div>
+        
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-language"></i>
+          </div>
+          <div class="feature-content">
+            <h4>Multilíngue</h4>
+            <p>Disponível em Português e línguas locais de Moçambique.</p>
+          </div>
+        </div>
+        
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <div class="feature-content">
+            <h4>Seguro e Privado</h4>
+            <p>Não requer dados pessoais sensíveis e protege a sua privacidade.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rota Beira-Moatize -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-route"></i>
+        </div>
+        <h2 class="card-title">Linha Beira – Moatize</h2>
+      </div>
+      
+      <p>A linha ferroviária Beira-Moatize é uma infraestrutura vital para o transporte de passageiros e carga no corredor da Beira, conectando importantes regiões económicas de Moçambique.</p>
+      
+      <div class="route-map">
+        <h3 style="color: white; margin-bottom: 20px;">Principais Estações</h3>
+        <div class="route-stations">
+          <div class="station">
+            <div class="station-dot"></div>
+            <strong>Beira</strong>
+            <small>Estuário do Púnguè</small>
+          </div>
+          
+          <div class="station">
+            <div class="station-dot"></div>
+            <strong>Dondo</strong>
+            <small>Junção importante</small>
+          </div>
+          
+          <div class="station">
+            <div class="station-dot"></div>
+            <strong>Inhamizua</strong>
+            <small>Zona agrícola</small>
+          </div>
+          
+          <div class="station">
+            <div class="station-dot"></div>
+            <strong>Moatize</strong>
+            <small>Bacia carbonífera</small>
+          </div>
+        </div>
+        
+        <div style="margin-top: 30px; display: flex; justify-content: space-between; font-size: 0.9rem; opacity: 0.9;">
+          <div><i class="fas fa-ruler"></i> ~600 km de extensão</div>
+          <div><i class="fas fa-clock"></i> ~12-14 horas de viagem</div>
+          <div><i class="fas fa-train"></i> 2-3 comboios diários</div>
+        </div>
+      </div>
+      
+      <h3>Informações Disponíveis</h3>
+      <ul style="margin-left: 20px; margin-top: 15px;">
+        <li>Horários de partida e chegada programados</li>
+        <li>Estado atual (a horas, atrasado, cancelado)</li>
+        <li>Tempo estimado de viagem</li>
+        <li>Avisos meteorológicos que afetam a linha</li>
+        <li>Informações sobre manutenção programada</li>
+      </ul>
+    </section>
+
+    <!-- Estatísticas -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h2 class="card-title">Impacto e Estatísticas</h2>
+      </div>
+      
+      <p>Desde o seu lançamento, o sistema tem contribuído significativamente para melhorar a experiência dos passageiros:</p>
+      
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-number">95%</div>
+          <div class="stat-label">Redução de desinformação</div>
+        </div>
+        
+        <div class="stat">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Disponibilidade</div>
+        </div>
+        
+        <div class="stat">
+          <div class="stat-number">10k+</div>
+          <div class="stat-label">Utilizadores mensais</div>
+        </div>
+        
+        <div class="stat">
+          <div class="stat-number">99.9%</div>
+          <div class="stat-label">Tempo de atividade</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stunner System -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-rocket"></i>
+        </div>
+        <h2 class="card-title">Stunner System</h2>
+      </div>
+      
+      <p><strong>Stunner System – Tecnologia ao serviço da mobilidade ferroviária em Moçambique.</strong></p>
+      
+      <p>A Stunner System é uma plataforma tecnológica especializada em soluções de transporte inteligente, focada em melhorar a experiência dos passageiros através da inovação digital.</p>
+      
+      <h3>Princípios da Stunner System:</h3>
+      <ul style="margin-left: 20px; margin-top: 15px;">
+        <li><strong>Simplicidade:</strong> Interfaces intuitivas que qualquer pessoa pode usar</li>
+        <li><strong>Confiabilidade:</strong> Sistemas robustos com 99.9% de disponibilidade</li>
+        <li><strong>Inovação:</strong> Implementação das melhores práticas tecnológicas</li>
+        <li><strong>Sustentabilidade:</strong> Soluções eficientes e escaláveis</li>
+        <li><strong>Colaboração:</strong> Parcerias com instituições como a CFM</li>
+      </ul>
+    </section>
+
+    <!-- Desenvolvedor -->
+    <div class="team-card">
+      <div class="team-content">
+        <div class="developer-avatar">
+          <i class="fas fa-code"></i>
+        </div>
+        
+        <h2 class="developer-name">Benjamim Januário</h2>
+        <p class="developer-title">Desenvolvedor Full-Stack & Fundador da Stunner System</p>
+        
+        <p>Especialista em desenvolvimento de sistemas web com mais de 5 anos de experiência, focado em criar soluções tecnológicas que resolvem problemas reais da comunidade moçambicana.</p>
+        
+        <div class="social-links">
+          <a href="https://github.com/benjamimjanuario" class="social-link" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="https://linkedin.com/in/benjamimjanuario" class="social-link" target="_blank">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="mailto:benjamim@stunnersystem.co.mz" class="social-link">
+            <i class="fas fa-envelope"></i>
+          </a>
+          <a href="https://stunnersystem.co.mz" class="social-link" target="_blank">
+            <i class="fas fa-globe"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tecnologias -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-cogs"></i>
+        </div>
+        <h2 class="card-title">Tecnologias Utilizadas</h2>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin-top: 20px;">
+        <div style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 10px;">
+          <i class="fab fa-html5" style="font-size: 2.5rem; color: #e34f26;"></i>
+          <div style="margin-top: 10px; font-weight: bold;">HTML5</div>
+        </div>
+        
+        <div style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 10px;">
+          <i class="fab fa-css3-alt" style="font-size: 2.5rem; color: #1572b6;"></i>
+          <div style="margin-top: 10px; font-weight: bold;">CSS3</div>
+        </div>
+        
+        <div style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 10px;">
+          <i class="fab fa-js" style="font-size: 2.5rem; color: #f7df1e;"></i>
+          <div style="margin-top: 10px; font-weight: bold;">JavaScript</div>
+        </div>
+        
+        <div style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 10px;">
+          <i class="fab fa-node-js" style="font-size: 2.5rem; color: #339933;"></i>
+          <div style="margin-top: 10px; font-weight: bold;">Node.js</div>
+        </div>
+        
+        <div style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 10px;">
+          <i class="fas fa-database" style="font-size: 2.5rem; color: #4479a1;"></i>
+          <div style="margin-top: 10px; font-weight: bold;">MongoDB</div>
+        </div>
+        
+        <div style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 10px;">
+          <i class="fab fa-aws" style="font-size: 2.5rem; color: #ff9900;"></i>
+          <div style="margin-top: 10px; font-weight: bold;">AWS</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div style="text-align: center; margin: 40px 0;">
+      <div class="btn-group">
+        <a href="index.html" class="btn">
+          <i class="fas fa-train"></i> Ver Atualizações em Tempo Real
+        </a>
+        <a href="contato.html" class="btn btn-outline">
+          <i class="fas fa-comments"></i> Dar Sugestões
+        </a>
+        <a href="politica.html" class="btn btn-outline">
+          <i class="fas fa-shield-alt"></i> Ver Política de Privacidade
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="index.html" class="footer-link">
+          <i class="fas fa-home"></i> Início
+        </a>
+        <a href="sobre.html" class="footer-link">
+          <i class="fas fa-info-circle"></i> Sobre
+        </a>
+        <a href="politica.html" class="footer-link">
+          <i class="fas fa-shield-alt"></i> Privacidade
+        </a>
+        <a href="termos.html" class="footer-link">
+          <i class="fas fa-file-contract"></i> Termos
+        </a>
+        <a href="contato.html" class="footer-link">
+          <i class="fas fa-envelope"></i> Contato
+        </a>
+      </div>
+      
+      <p>© 2024 CFM - Caminhos de Ferro de Moçambique & Stunner System. Todos os direitos reservados.</p>
+      <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-light);">
+        Sistema desenvolvido com <i class="fas fa-heart" style="color: #c62828;"></i> para os passageiros moçambicanos
+      </p>
+    </footer>
   </div>
+
+  <script>
+    // Animação simples para as estatísticas
+    document.addEventListener('DOMContentLoaded', function() {
+      const stats = document.querySelectorAll('.stat-number');
+      
+      stats.forEach(stat => {
+        const finalValue = parseInt(stat.textContent);
+        let currentValue = 0;
+        const increment = finalValue / 50;
+        const timer = setInterval(() => {
+          currentValue += increment;
+          if (currentValue >= finalValue) {
+            currentValue = finalValue;
+            clearInterval(timer);
+          }
+          stat.textContent = Math.floor(currentValue) + (stat.textContent.includes('%') ? '%' : '');
+        }, 30);
+      });
+      
+      // Efeito de digitação no título
+      const heroTitle = document.querySelector('.hero h1');
+      const originalText = heroTitle.textContent;
+      heroTitle.textContent = '';
+      
+      let i = 0;
+      function typeWriter() {
+        if (i < originalText.length) {
+          heroTitle.textContent += originalText.charAt(i);
+          i++;
+          setTimeout(typeWriter, 50);
+        }
+      }
+      
+      // Inicia a animação após 0.5 segundos
+      setTimeout(typeWriter, 500);
+    });
+  </script>
 </body>
 </html>
