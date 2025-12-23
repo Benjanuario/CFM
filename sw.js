@@ -1,12 +1,14 @@
 // sw.js - Service Worker para CFM Actualizações
-const CACHE_NAME = 'cfm-updates-v1.2';
-const STATIC_CACHE = 'cfm-static-v1.1';
-const API_CACHE = 'cfm-api-v1.1';
+const CACHE_NAME = 'cfm-updates-v1.3';
+const STATIC_CACHE = 'cfm-static-v1.3';
+const API_CACHE = 'cfm-api-v1.3';
 
 // URLs para cache
 const STATIC_ASSETS = [
   './',
   './index.html',
+  './termos.html',
+  './politicas.html',
   './sound.mp3',
   'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
