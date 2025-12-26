@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CFM Atualizações - Sistema de Cadastro</title>
+  <title>CFM Actualizações - Comboio Beira / Moatize</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -1640,21 +1640,6 @@
   
   return chatId;
 }
-      
-      // 2. Tentar usar o currentUser existente
-      if (currentUser && currentUser.includes('_')) {
-        return currentUser;
-      }
-      
-      // 3. Fallback para usuário anônimo
-      let fallbackId = localStorage.getItem("chatUserId");
-      if (!fallbackId) {
-        fallbackId = "Anon_" + Math.floor(100000 + Math.random() * 900000);
-        localStorage.setItem("chatUserId", fallbackId);
-      }
-      
-      return fallbackId;
-    }
     
     // Mostrar mensagem localmente imediatamente
     function mostrarMensagemLocal(texto, mensagemId) {
@@ -2328,6 +2313,7 @@
       }
     });
   </script>
-  <script>(function(s){s.dataset.zone='10379062',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+  <script>(function(s){s.dataset.zone='10379062',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement,
+  document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </body>
 </html>
