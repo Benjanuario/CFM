@@ -1694,14 +1694,27 @@ async function sendChatMessage() {
 }
 
 function getChatUserId() {
-  let userId = localStorage.getItem("chatUserId");
-
-  if (!userId) {
-    userId = "user_" + crypto.randomUUID();
-    localStorage.setItem("chatUserId", userId);
+  // 1. Primeiro, verifica se tem usuário cadastrado
+  const usuarioSalvo = JSON.parse(localStorage.getItem("usuario"));
+  
+  if (usuarioSalvo && usuarioSalvo.nome && usuarioSalvo.telefone) {
+    const primeiroNome = usuarioSalvo.nome.trim().split(/\s+/)[0];
+    const telefoneLimpo = usuarioSalvo.telefone.replace(/\D/g, '');
+    const telefoneSemCodigo = telefoneLimpo.replace(/^258/, '');
+    
+    // Retorna no formato: PrimeiroNome_Numero (ex: Joao_868458465)
+    return `${primeiroNome}_${telefoneSemCodigo}`;
   }
-
-  return userId;
+  
+  // 2. Se não tem cadastro, verifica se já tem um ID no localStorage
+  let chatId = localStorage.getItem("chatUserId");
+  if (!chatId) {
+    // Cria um ID temporário
+    chatId = `Anon_${Math.floor(100000 + Math.random() * 900000)}`;
+    localStorage.setItem("chatUserId", chatId);
+  }
+  
+  return chatId;
 }
     
     // ============================================
