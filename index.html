@@ -229,6 +229,49 @@
       20%, 40%, 60%, 80% { transform: translateX(5px); }
     }
     
+    /* ESTILOS PARA CHAT EM TEMPO REAL */
+    .enviando {
+      color: #ff9800;
+      font-size: 0.8em;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .enviando i {
+      animation: pulse 1.5s infinite;
+    }
+    
+    .reenviar-btn {
+      background: #f44336;
+      color: white;
+      border: none;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.6rem;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+    
+    .reenviar-btn:hover {
+      background: #d32f2f;
+    }
+    
+    @keyframes slideInMessage {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .mensagem-nova {
+      animation: slideInMessage 0.3s ease;
+    }
+    
     #botao-panico {
       position: fixed;
       bottom: 90px;
@@ -1066,6 +1109,12 @@
     let notificationAudio = null;
     
     // ============================================
+    // VARIÁVEIS PARA CHAT EM TEMPO REAL
+    // ============================================
+    let pollingInterval = null;
+    let ultimaVerificacaoChat = 0;
+    
+    // ============================================
     // SISTEMA DE CADASTRO (SOMENTE NO SIM)
     // ============================================
     function validarNome(nome) {
@@ -1554,168 +1603,399 @@
     });
     
     // ============================================
-    // SISTEMA DE CHAT 
-// ============================================
-document.getElementById('openChat').addEventListener('click', () => {
-  document.getElementById('chatScreen').style.display = 'flex';
-  loadChatMessages();
-});
-
-document.getElementById('closeChat').addEventListener('click', () => {
-  document.getElementById('chatScreen').style.display = 'none';
-});
-
-async function loadChatMessages() {
-  const el = document.getElementById('chat-messages');
-  try {
-    const res = await fetch(`${GAS_URL}?action=chat`);
-    const data = await res.json();
-    const chat = data.chat || [];
-    chat.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-
-    if (chat.length === 0) {
-      el.innerHTML = '<div class="waiting">Nenhuma mensagem ainda.</div>';
-      return;
-    }
-
-    el.innerHTML = chat.map(m => {
-      const isCurrentUser = m.usuario === currentUser;
-      const msgId = m.id || Math.random().toString(36).substr(2, 9);
-      if (isCurrentUser) userMessages[msgId] = m;
-
-      let filtered = m.mensagem.replace(
-        /estúpida|estúpido|merda|caralho|foder|vagina|porra|puta|puto|cacete|buceta|pênis|pau|bosta|desgraçado|inferno|cu|arrombado|imbecil|idiota|otário|babaca|canalha|safado|vagabundo|nojento|lixo|droga|merdinha|caralh|fd|pta|fdp|krl|kct|buc|puta|http:|https|www.|.com|.net|.org|bit.ly|t.co|tinyurl|goo.gl|instagram.com|facebook.com|whatsapp.com|telegram.me|/gi,
-        ''
-      );
-
-      return `
-        <div class="message-container">
-          <div class="message ${isCurrentUser ? 'sent' : 'received'}">
-            <div class="message-sender">${m.usuario}</div>
-            <div class="message-text">${filtered}</div>
-            <div class="message-info">
-              <span>${new Date(m.timestamp).toLocaleTimeString('pt-MZ', {hour:'2-digit',minute:'2-digit'})}</span>
-              ${isCurrentUser ? '<span><i class="fas fa-check"></i></span>' : ''}
-            </div>
-            ${isCurrentUser ? `
-              <div class="message-actions">
-                <button onclick="editMessage('${msgId}')" class="action-btn edit"><i class="fas fa-edit"></i></button>
-                <button onclick="deleteMessage('${msgId}')" class="action-btn delete"><i class="fas fa-trash"></i></button>
-                <button onclick="copyToClipboard(\`${escapeText(m.mensagem)}\`)" class="action-btn"><i class="far fa-copy"></i></button>
-              </div>
-            ` : `
-              <div class="message-actions">
-                <button onclick="replyToMessage('${m.usuario}', \`${escapeText(m.mensagem)}\`)" class="action-btn"><i class="fas fa-reply"></i></button>
-                <button onclick="hideMessage(this)" class="action-btn"><i class="fas fa-eye-slash"></i></button>
-                <button onclick="copyToClipboard(\`${escapeText(m.mensagem)}\`)" class="action-btn"><i class="far fa-copy"></i></button>
-              </div>
-            `}
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    el.scrollTop = el.scrollHeight;
-  } catch (e) {
-    console.error('Erro ao carregar chat:', e);
-    el.innerHTML = '<div class="message received"><div class="message-text">Erro ao carregar chat.</div></div>';
-  }
-}
-
-function replyToMessage(user, msg) {
-  document.getElementById('chat-text').value = `@${user}: ${msg.substring(0, 50)}... `;
-  document.getElementById('chat-text').focus();
-}
-
-function hideMessage(btn) {
-  const container = btn.closest('.message-container');
-  container.style.opacity = '0.5';
-  setTimeout(() => { container.style.display = 'none'; }, 300);
-}
-
-function editMessage(id) {
-  alert('Edição em desenvolvimento.');
-}
-
-function deleteMessage(id) {
-  if (confirm('Eliminar mensagem?')) {
-    const container = document.querySelector(`[onclick*="${id}"`)?.closest('.message-container');
-    if (container) {
-      container.style.animation = 'fadeInMessage 0.3s ease reverse';
-      setTimeout(() => container.remove(), 300);
-    }
-  }
-}
-
-document.getElementById('chat-send').addEventListener('click', sendChatMessage);
-document.getElementById('chat-text').addEventListener('keypress', (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendChatMessage();
-  }
-});
-
-async function sendChatMessage() {
-  const input = document.getElementById('chat-text');
-  const btn = document.getElementById('chat-send');
-  const msg = input.value.trim();
-
-  if (!msg) return;
-
-  btn.classList.add('loading');
-  btn.disabled = true;
-
-  const formData = new URLSearchParams();
-  formData.append('action', 'chat');
-  formData.append('msg', msg);
-
-  // 🔴 ALTERAÇÃO CRÍTICA (sem mudar nomes)
-  formData.append('userId', getChatUserId());
-
-  try {
-    await fetch(GAS_URL, {
-      method: 'POST',
-      body: formData,
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    });
-
-    input.value = '';
-    btn.classList.remove('loading');
-    btn.disabled = false;
-    btn.style.background = '#1da851';
-    setTimeout(() => { btn.style.background = ''; }, 500);
-
-    await loadChatMessages();
-  } catch (e) {
-    alert("Não foi possível enviar.");
-    btn.classList.remove('loading');
-    btn.disabled = false;
-  }
-}
-
-function getChatUserId() {
-  // 1. Primeiro, verifica se tem usuário cadastrado
-  const usuarioSalvo = JSON.parse(localStorage.getItem("usuario"));
-  
-  if (usuarioSalvo && usuarioSalvo.nome && usuarioSalvo.telefone) {
-    const primeiroNome = usuarioSalvo.nome.trim().split(/\s+/)[0];
-    const telefoneLimpo = usuarioSalvo.telefone.replace(/\D/g, '');
-    const telefoneSemCodigo = telefoneLimpo.replace(/^258/, '');
+    // FUNÇÕES PARA CHAT EM TEMPO REAL
+    // ============================================
     
-    // Retorna no formato: PrimeiroNome_Numero (ex: Joao_868458465)
-    return `${primeiroNome}_${telefoneSemCodigo}`;
+    function getChatUserId() {
+  // 1. Primeiro tenta usar o usuário cadastrado
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  
+  if (usuario && usuario.nome && usuario.telefone) {
+    try {
+      const primeiroNome = usuario.nome.trim().split(/\s+/)[0];
+      const telefoneLimpo = usuario.telefone.replace(/\D/g, '');
+      const telefoneSemCodigo = telefoneLimpo.replace(/^258/, '');
+      
+      // Garantir que o número tenha pelo menos 7 dígitos
+      if (telefoneSemCodigo.length >= 7) {
+        const userId = `${primeiroNome}_${telefoneSemCodigo}`;
+        console.log("ID gerado do usuário cadastrado:", userId);
+        return userId;
+      }
+    } catch (e) {
+      console.warn("Erro ao processar usuário cadastrado:", e);
+    }
   }
   
-  // 2. Se não tem cadastro, verifica se já tem um ID no localStorage
+  // 2. Se não tem cadastro, verifica se já existe um ID no localStorage
   let chatId = localStorage.getItem("chatUserId");
+  
   if (!chatId) {
-    // Cria um ID temporário
-    chatId = `Anon_${Math.floor(100000 + Math.random() * 900000)}`;
+    // Cria um ID temporário no mesmo formato
+    const randomNum = Math.floor(1000000 + Math.random() * 9000000);
+    chatId = `Visitante_${randomNum}`;
     localStorage.setItem("chatUserId", chatId);
+    console.log("ID temporário criado:", chatId);
   }
   
   return chatId;
 }
+      
+      // 2. Tentar usar o currentUser existente
+      if (currentUser && currentUser.includes('_')) {
+        return currentUser;
+      }
+      
+      // 3. Fallback para usuário anônimo
+      let fallbackId = localStorage.getItem("chatUserId");
+      if (!fallbackId) {
+        fallbackId = "Anon_" + Math.floor(100000 + Math.random() * 900000);
+        localStorage.setItem("chatUserId", fallbackId);
+      }
+      
+      return fallbackId;
+    }
+    
+    // Mostrar mensagem localmente imediatamente
+    function mostrarMensagemLocal(texto, mensagemId) {
+      const chatContainer = document.getElementById('chat-messages');
+      const userId = getChatUserId();
+      
+      const mensagemHTML = `
+        <div class="message-container mensagem-nova" id="msg_temp_${mensagemId}">
+          <div class="message sent">
+            <div class="message-sender">${userId}</div>
+            <div class="message-text">${escapeHTML(texto)}</div>
+            <div class="message-info">
+              <span>Agora mesmo</span>
+              <span class="enviando"><i class="fas fa-clock"></i> Enviando...</span>
+            </div>
+            <div class="message-actions">
+              <button onclick="cancelarEnvio('${mensagemId}')" class="action-btn delete" title="Cancelar envio">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Adiciona no final
+      chatContainer.insertAdjacentHTML('beforeend', mensagemHTML);
+      
+      // Remove mensagem de "carregando" se existir
+      const waiting = chatContainer.querySelector('.waiting');
+      if (waiting) waiting.remove();
+      
+      // Rola para mostrar a nova mensagem
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      
+      return mensagemId;
+    }
+    
+    // Marcar como enviada
+    function marcarMensagemComoEnviada(mensagemId) {
+      const msgElement = document.getElementById(`msg_temp_${mensagemId}`);
+      if (msgElement) {
+        const enviandoSpan = msgElement.querySelector('.enviando');
+        if (enviandoSpan) {
+          enviandoSpan.innerHTML = '<i class="fas fa-check"></i> Enviado';
+          enviandoSpan.style.color = '#4CAF50';
+        }
+        
+        // Remover o ID temporário depois de 2 segundos
+        setTimeout(() => {
+          msgElement.removeAttribute('id');
+        }, 2000);
+      }
+    }
+    
+    // Marcar como falha
+    function marcarMensagemComoFalha(mensagemId) {
+      const msgElement = document.getElementById(`msg_temp_${mensagemId}`);
+      if (msgElement) {
+        const enviandoSpan = msgElement.querySelector('.enviando');
+        if (enviandoSpan) {
+          enviandoSpan.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Falhou';
+          enviandoSpan.style.color = '#f44336';
+        }
+        
+        // Adicionar botão para reenviar
+        const messageDiv = msgElement.querySelector('.message');
+        if (messageDiv && !messageDiv.querySelector('.reenviar-btn')) {
+          const reenviarBtn = document.createElement('button');
+          reenviarBtn.className = 'reenviar-btn';
+          reenviarBtn.innerHTML = '<i class="fas fa-redo"></i> Reenviar';
+          reenviarBtn.onclick = () => reenviarMensagem(mensagemId);
+          enviandoSpan.appendChild(reenviarBtn);
+        }
+      }
+    }
+    
+    // Cancelar envio
+    function cancelarEnvio(mensagemId) {
+      const msgElement = document.getElementById(`msg_temp_${mensagemId}`);
+      if (msgElement && confirm('Cancelar envio desta mensagem?')) {
+        msgElement.remove();
+      }
+    }
+    
+    // Reenviar mensagem
+    function reenviarMensagem(mensagemId) {
+      const msgElement = document.getElementById(`msg_temp_${mensagemId}`);
+      if (msgElement) {
+        const texto = msgElement.querySelector('.message-text').textContent;
+        msgElement.remove();
+        document.getElementById('chat-text').value = texto;
+        document.getElementById('chat-send').click();
+      }
+    }
+    
+    // Iniciar polling automático
+    function iniciarPollingChat() {
+      if (pollingInterval) clearInterval(pollingInterval);
+      
+      pollingInterval = setInterval(async () => {
+        if (document.getElementById('chatScreen').style.display === 'flex') {
+          await verificarNovasMensagens();
+        }
+      }, 3000); // Verifica a cada 3 segundos
+    }
+    
+    // Verificar se há novas mensagens
+    async function verificarNovasMensagens() {
+      try {
+        const res = await fetch(`${GAS_URL}?action=chat&t=${Date.now()}`);
+        const data = await res.json();
+        
+        if (data.chat && data.chat.length > 0) {
+          const ultimaMsg = data.chat[data.chat.length - 1];
+          const ultimoTimestamp = new Date(ultimaMsg.timestamp).getTime();
+          
+          // Se houver mensagem mais nova
+          if (ultimoTimestamp > ultimaVerificacaoChat) {
+            const meuUserId = getChatUserId();
+            
+            // Se não for minha própria mensagem
+            if (ultimaMsg.usuario !== meuUserId) {
+              // Notificar usuário
+              notificarNovaMensagem();
+              
+              // Se chat está aberto, atualizar
+              if (document.getElementById('chatScreen').style.display === 'flex') {
+                await loadChatMessages();
+              }
+            }
+            
+            ultimaVerificacaoChat = ultimoTimestamp;
+          }
+        }
+      } catch (e) {
+        console.log('Erro ao verificar novas mensagens:', e);
+      }
+    }
+    
+    // Notificar nova mensagem recebida
+    function notificarNovaMensagem() {
+      // Se chat não está visível, mostrar notificação
+      if (document.getElementById('chatScreen').style.display !== 'flex') {
+        const badge = document.getElementById('chatBadge');
+        const current = parseInt(badge.textContent) || 0;
+        badge.textContent = current + 1;
+        badge.style.display = 'flex';
+        
+        // Adicionar animação no botão do chat
+        const chatBtn = document.getElementById('openChat');
+        chatBtn.classList.add('pulse');
+        
+        // Vibração (se suportada)
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        
+        // Som de notificação
+        playNotificationSound();
+        
+        // Remover animação após 5 segundos
+        setTimeout(() => {
+          chatBtn.classList.remove('pulse');
+        }, 5000);
+      }
+    }
+    
+    // ============================================
+    // SISTEMA DE CHAT 
+    // ============================================
+    document.getElementById('openChat').addEventListener('click', () => {
+      document.getElementById('chatScreen').style.display = 'flex';
+      loadChatMessages();
+      iniciarPollingChat();
+      
+      // Limpar notificações quando abre o chat
+      const badge = document.getElementById('chatBadge');
+      badge.textContent = '0';
+      badge.style.display = 'none';
+    });
+    
+    document.getElementById('closeChat').addEventListener('click', () => {
+      document.getElementById('chatScreen').style.display = 'none';
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+        pollingInterval = null;
+      }
+    });
+    
+    async function loadChatMessages() {
+      const el = document.getElementById('chat-messages');
+      try {
+        const res = await fetch(`${GAS_URL}?action=chat&t=${Date.now()}`);
+        const data = await res.json();
+        const chat = data.chat || [];
+        chat.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+        if (chat.length === 0) {
+          el.innerHTML = '<div class="waiting">Nenhuma mensagem ainda.</div>';
+          return;
+        }
+
+        el.innerHTML = chat.map(m => {
+          const isCurrentUser = m.usuario === getChatUserId();
+          const msgId = m.id || Math.random().toString(36).substr(2, 9);
+          if (isCurrentUser) userMessages[msgId] = m;
+
+          let filtered = m.mensagem.replace(
+            /estúpida|estúpido|merda|caralho|foder|vagina|porra|puta|puto|cacete|buceta|pênis|pau|bosta|desgraçado|inferno|cu|arrombado|imbecil|idiota|otário|babaca|canalha|safado|vagabundo|nojento|lixo|droga|merdinha|caralh|fd|pta|fdp|krl|kct|buc|puta|http:|https|www.|.com|.net|.org|bit.ly|t.co|tinyurl|goo.gl|instagram.com|facebook.com|whatsapp.com|telegram.me/gi,
+            ''
+          );
+
+          return `
+            <div class="message-container">
+              <div class="message ${isCurrentUser ? 'sent' : 'received'}">
+                <div class="message-sender">${m.usuario}</div>
+                <div class="message-text">${filtered}</div>
+                <div class="message-info">
+                  <span>${new Date(m.timestamp).toLocaleTimeString('pt-MZ', {hour:'2-digit',minute:'2-digit'})}</span>
+                  ${isCurrentUser ? '<span><i class="fas fa-check"></i></span>' : ''}
+                </div>
+                ${isCurrentUser ? `
+                  <div class="message-actions">
+                    <button onclick="editMessage('${msgId}')" class="action-btn edit"><i class="fas fa-edit"></i></button>
+                    <button onclick="deleteMessage('${msgId}')" class="action-btn delete"><i class="fas fa-trash"></i></button>
+                    <button onclick="copyToClipboard(\`${escapeText(m.mensagem)}\`)" class="action-btn"><i class="far fa-copy"></i></button>
+                  </div>
+                ` : `
+                  <div class="message-actions">
+                    <button onclick="replyToMessage('${m.usuario}', \`${escapeText(m.mensagem)}\`)" class="action-btn"><i class="fas fa-reply"></i></button>
+                    <button onclick="hideMessage(this)" class="action-btn"><i class="fas fa-eye-slash"></i></button>
+                    <button onclick="copyToClipboard(\`${escapeText(m.mensagem)}\`)" class="action-btn"><i class="far fa-copy"></i></button>
+                  </div>
+                `}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Salvar timestamp da última mensagem
+        if (chat.length > 0) {
+          const ultima = chat[chat.length - 1];
+          ultimaVerificacaoChat = new Date(ultima.timestamp).getTime();
+        }
+
+        // Rolar para o final
+        el.scrollTop = el.scrollHeight;
+        
+      } catch (e) {
+        console.error('Erro ao carregar chat:', e);
+        el.innerHTML = '<div class="message received"><div class="message-text">Erro ao carregar chat.</div></div>';
+      }
+    }
+    
+    function replyToMessage(user, msg) {
+      document.getElementById('chat-text').value = `@${user}: ${msg.substring(0, 50)}... `;
+      document.getElementById('chat-text').focus();
+    }
+    
+    function hideMessage(btn) {
+      const container = btn.closest('.message-container');
+      container.style.opacity = '0.5';
+      setTimeout(() => { container.style.display = 'none'; }, 300);
+    }
+    
+    function editMessage(id) {
+      alert('Edição em desenvolvimento.');
+    }
+    
+    function deleteMessage(id) {
+      if (confirm('Eliminar mensagem?')) {
+        const container = document.querySelector(`[onclick*="${id}"`)?.closest('.message-container');
+        if (container) {
+          container.style.animation = 'fadeInMessage 0.3s ease reverse';
+          setTimeout(() => container.remove(), 300);
+        }
+      }
+    }
+    
+    document.getElementById('chat-send').addEventListener('click', sendChatMessage);
+    document.getElementById('chat-text').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendChatMessage();
+      }
+    });
+    
+    async function sendChatMessage() {
+      const input = document.getElementById('chat-text');
+      const btn = document.getElementById('chat-send');
+      const msg = input.value.trim();
+
+      if (!msg) return;
+
+      // 1. Feedback visual imediato
+      const mensagemId = Date.now() + Math.random();
+      mostrarMensagemLocal(msg, mensagemId);
+      
+      // 2. Desabilitar UI temporariamente
+      btn.classList.add('loading');
+      btn.disabled = true;
+      const textoOriginal = input.value;
+      input.value = '';
+
+      // 3. Enviar assincronamente
+      setTimeout(async () => {
+        try {
+          const formData = new URLSearchParams();
+          formData.append('action', 'chat');
+          formData.append('msg', msg);
+          formData.append('userId', getChatUserId());
+
+          const response = await fetch(GAS_URL, {
+            method: 'POST',
+            body: formData,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+          });
+
+          if (response.ok) {
+            // Sucesso - marcar como enviada
+            marcarMensagemComoEnviada(mensagemId);
+            
+            // Atualizar lista completa após 1.5 segundos
+            setTimeout(async () => {
+              await loadChatMessages();
+            }, 1500);
+            
+          } else {
+            throw new Error('Falha no servidor');
+          }
+          
+        } catch (e) {
+          // Falha - marcar como erro
+          marcarMensagemComoFalha(mensagemId);
+          console.error('Erro ao enviar:', e);
+          
+        } finally {
+          // Restaurar UI
+          btn.classList.remove('loading');
+          btn.disabled = false;
+        }
+      }, 300); // Pequeno delay para animação
+    }
     
     // ============================================
     // SISTEMA DE PROTEÇÃO (SOMENTE NO SIM)
@@ -1969,7 +2249,6 @@ function getChatUserId() {
     }
     
     function verificarBloqueioRemoto() {
-      // Verificação remota (simplificada para exemplo)
       try {
         fetch(`${GAS_URL}?action=verificar_bloqueio&t=${Date.now()}`)
           .then(res => res.json())
@@ -2009,6 +2288,14 @@ function getChatUserId() {
       window.addEventListener('offline', updateOnlineStatus);
       updateOnlineStatus();
       setInterval(updateLastUpdateTime, 60000);
+      
+      // Inicializar sistema de chat em tempo real
+      iniciarPollingChat();
+      
+      // Verificar novas mensagens periodicamente (mesmo com chat fechado)
+      setInterval(async () => {
+        await verificarNovasMensagens();
+      }, 10000);
       
       // Verificar bloqueio
       if (localStorage.getItem('cfm_bloqueado') === 'true') {
