@@ -1,7 +1,7 @@
 // sw.js - Service Worker para CFM Actualizações
-const CACHE_NAME = 'cfm-updates-v1.9';
-const STATIC_CACHE = 'cfm-static-v1.9';
-const API_CACHE = 'cfm-api-v1.9';
+const CACHE_NAME = 'cfm-updates-v2';
+const STATIC_CACHE = 'cfm-static-v2';
+const API_CACHE = 'cfm-api-v2';
 
 // URLs para cache
 const STATIC_ASSETS = [
