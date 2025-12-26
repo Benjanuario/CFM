@@ -1687,6 +1687,17 @@
         btn.disabled = false;
       }
     }
+
+function getChatUserId() {
+  let userId = localStorage.getItem("chatUserId");
+
+  if (!userId) {
+    userId = "user_" + crypto.randomUUID();
+    localStorage.setItem("chatUserId", userId);
+  }
+
+  return userId;
+}
     
     // ============================================
     // SISTEMA DE PROTEÇÃO (SOMENTE NO SIM)
