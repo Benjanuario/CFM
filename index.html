@@ -1554,139 +1554,144 @@
     });
     
     // ============================================
-    // SISTEMA DE CHAT (IGUAL AO INDEX)
-    // ============================================
-    document.getElementById('openChat').addEventListener('click', () => {
-      document.getElementById('chatScreen').style.display = 'flex';
-      loadChatMessages();
-    });
-    
-    document.getElementById('closeChat').addEventListener('click', () => {
-      document.getElementById('chatScreen').style.display = 'none';
-    });
-    
-    async function loadChatMessages() {
-      const el = document.getElementById('chat-messages');
-      try {
-        const res = await fetch(`${GAS_URL}?action=chat`);
-        const data = await res.json();
-        const chat = data.chat || [];
-        chat.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-        
-        if (chat.length === 0) {
-          el.innerHTML = '<div class="waiting">Nenhuma mensagem ainda.</div>';
-          return;
-        }
-        
-        el.innerHTML = chat.map(m => {
-          const isCurrentUser = m.usuario === currentUser;
-          const msgId = m.id || Math.random().toString(36).substr(2, 9);
-          if (isCurrentUser) userMessages[msgId] = m;
-          
-          let filtered = m.mensagem.replace(/estúpida|estúpido|merda|caralho|foder|vagina|porra|puta|puto|cacete|buceta|pênis|pau|bosta|desgraçado|inferno|cu|arrombado|imbecil|idiota|otário|babaca|canalha|safado|vagabundo|nojento|lixo|droga|merdinha|caralh|fd|pta|fdp|krl|kct|buc|puta|http:|https|www.|.com|.net|.org|bit.ly|t.co|tinyurl|goo.gl|instagram.com|facebook.com|whatsapp.com|telegram.me|/gi, '');
-          
-          return `
-            <div class="message-container">
-              <div class="message ${isCurrentUser ? 'sent' : 'received'}">
-                <div class="message-sender">${m.usuario}</div>
-                <div class="message-text">${filtered}</div>
-                <div class="message-info">
-                  <span>${new Date(m.timestamp).toLocaleTimeString('pt-MZ', {hour:'2-digit',minute:'2-digit'})}</span>
-                  ${isCurrentUser ? '<span><i class="fas fa-check"></i></span>' : ''}
-                </div>
-                ${isCurrentUser ? `
-                  <div class="message-actions">
-                    <button onclick="editMessage('${msgId}')" class="action-btn edit"><i class="fas fa-edit"></i></button>
-                    <button onclick="deleteMessage('${msgId}')" class="action-btn delete"><i class="fas fa-trash"></i></button>
-                    <button onclick="copyToClipboard(\`${escapeText(m.mensagem)}\`)" class="action-btn"><i class="far fa-copy"></i></button>
-                  </div>
-                ` : `
-                  <div class="message-actions">
-                    <button onclick="replyToMessage('${m.usuario}', \`${escapeText(m.mensagem)}\`)" class="action-btn"><i class="fas fa-reply"></i></button>
-                    <button onclick="hideMessage(this)" class="action-btn"><i class="fas fa-eye-slash"></i></button>
-                    <button onclick="copyToClipboard(\`${escapeText(m.mensagem)}\`)" class="action-btn"><i class="far fa-copy"></i></button>
-                  </div>
-                `}
-              </div>
+    // SISTEMA DE CHAT 
+// ============================================
+document.getElementById('openChat').addEventListener('click', () => {
+  document.getElementById('chatScreen').style.display = 'flex';
+  loadChatMessages();
+});
+
+document.getElementById('closeChat').addEventListener('click', () => {
+  document.getElementById('chatScreen').style.display = 'none';
+});
+
+async function loadChatMessages() {
+  const el = document.getElementById('chat-messages');
+  try {
+    const res = await fetch(`${GAS_URL}?action=chat`);
+    const data = await res.json();
+    const chat = data.chat || [];
+    chat.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    if (chat.length === 0) {
+      el.innerHTML = '<div class="waiting">Nenhuma mensagem ainda.</div>';
+      return;
+    }
+
+    el.innerHTML = chat.map(m => {
+      const isCurrentUser = m.usuario === currentUser;
+      const msgId = m.id || Math.random().toString(36).substr(2, 9);
+      if (isCurrentUser) userMessages[msgId] = m;
+
+      let filtered = m.mensagem.replace(
+        /estúpida|estúpido|merda|caralho|foder|vagina|porra|puta|puto|cacete|buceta|pênis|pau|bosta|desgraçado|inferno|cu|arrombado|imbecil|idiota|otário|babaca|canalha|safado|vagabundo|nojento|lixo|droga|merdinha|caralh|fd|pta|fdp|krl|kct|buc|puta|http:|https|www.|.com|.net|.org|bit.ly|t.co|tinyurl|goo.gl|instagram.com|facebook.com|whatsapp.com|telegram.me|/gi,
+        ''
+      );
+
+      return `
+        <div class="message-container">
+          <div class="message ${isCurrentUser ? 'sent' : 'received'}">
+            <div class="message-sender">${m.usuario}</div>
+            <div class="message-text">${filtered}</div>
+            <div class="message-info">
+              <span>${new Date(m.timestamp).toLocaleTimeString('pt-MZ', {hour:'2-digit',minute:'2-digit'})}</span>
+              ${isCurrentUser ? '<span><i class="fas fa-check"></i></span>' : ''}
             </div>
-          `;
-        }).join('');
-        
-        el.scrollTop = el.scrollHeight;
-      } catch (e) {
-        console.error('Erro ao carregar chat:', e);
-        el.innerHTML = '<div class="message received"><div class="message-text">Erro ao carregar chat.</div></div>';
-      }
+            ${isCurrentUser ? `
+              <div class="message-actions">
+                <button onclick="editMessage('${msgId}')" class="action-btn edit"><i class="fas fa-edit"></i></button>
+                <button onclick="deleteMessage('${msgId}')" class="action-btn delete"><i class="fas fa-trash"></i></button>
+                <button onclick="copyToClipboard(\`${escapeText(m.mensagem)}\`)" class="action-btn"><i class="far fa-copy"></i></button>
+              </div>
+            ` : `
+              <div class="message-actions">
+                <button onclick="replyToMessage('${m.usuario}', \`${escapeText(m.mensagem)}\`)" class="action-btn"><i class="fas fa-reply"></i></button>
+                <button onclick="hideMessage(this)" class="action-btn"><i class="fas fa-eye-slash"></i></button>
+                <button onclick="copyToClipboard(\`${escapeText(m.mensagem)}\`)" class="action-btn"><i class="far fa-copy"></i></button>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    el.scrollTop = el.scrollHeight;
+  } catch (e) {
+    console.error('Erro ao carregar chat:', e);
+    el.innerHTML = '<div class="message received"><div class="message-text">Erro ao carregar chat.</div></div>';
+  }
+}
+
+function replyToMessage(user, msg) {
+  document.getElementById('chat-text').value = `@${user}: ${msg.substring(0, 50)}... `;
+  document.getElementById('chat-text').focus();
+}
+
+function hideMessage(btn) {
+  const container = btn.closest('.message-container');
+  container.style.opacity = '0.5';
+  setTimeout(() => { container.style.display = 'none'; }, 300);
+}
+
+function editMessage(id) {
+  alert('Edição em desenvolvimento.');
+}
+
+function deleteMessage(id) {
+  if (confirm('Eliminar mensagem?')) {
+    const container = document.querySelector(`[onclick*="${id}"`)?.closest('.message-container');
+    if (container) {
+      container.style.animation = 'fadeInMessage 0.3s ease reverse';
+      setTimeout(() => container.remove(), 300);
     }
-    
-    function replyToMessage(user, msg) {
-      document.getElementById('chat-text').value = `@${user}: ${msg.substring(0, 50)}... `;
-      document.getElementById('chat-text').focus();
-    }
-    
-    function hideMessage(btn) {
-      const container = btn.closest('.message-container');
-      container.style.opacity = '0.5';
-      setTimeout(() => { container.style.display = 'none'; }, 300);
-    }
-    
-    function editMessage(id) {
-      alert('Edição em desenvolvimento.');
-    }
-    
-    function deleteMessage(id) {
-      if (confirm('Eliminar mensagem?')) {
-        const container = document.querySelector(`[onclick*="${id}"`)?.closest('.message-container');
-        if (container) {
-          container.style.animation = 'fadeInMessage 0.3s ease reverse';
-          setTimeout(() => container.remove(), 300);
-        }
-      }
-    }
-    
-    document.getElementById('chat-send').addEventListener('click', sendChatMessage);
-    document.getElementById('chat-text').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendChatMessage();
-      }
+  }
+}
+
+document.getElementById('chat-send').addEventListener('click', sendChatMessage);
+document.getElementById('chat-text').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
+  }
+});
+
+async function sendChatMessage() {
+  const input = document.getElementById('chat-text');
+  const btn = document.getElementById('chat-send');
+  const msg = input.value.trim();
+
+  if (!msg) return;
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  const formData = new URLSearchParams();
+  formData.append('action', 'chat');
+  formData.append('msg', msg);
+
+  // 🔴 ALTERAÇÃO CRÍTICA (sem mudar nomes)
+  formData.append('userId', getChatUserId());
+
+  try {
+    await fetch(GAS_URL, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     });
-    
-    async function sendChatMessage() {
-      const input = document.getElementById('chat-text');
-      const btn = document.getElementById('chat-send');
-      const msg = input.value.trim();
-      
-      if (!msg) return;
-      
-      btn.classList.add('loading');
-      btn.disabled = true;
-      
-      const formData = new URLSearchParams();
-      formData.append('action', 'chat');
-      formData.append('msg', msg);
-      formData.append('user', currentUser);
-      
-      try {
-        await fetch(GAS_URL, {
-          method: 'POST',
-          body: formData,
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        });
-        
-        input.value = '';
-        btn.classList.remove('loading');
-        btn.disabled = false;
-        btn.style.background = '#1da851';
-        setTimeout(() => { btn.style.background = ''; }, 500);
-        
-        await loadChatMessages();
-      } catch (e) {
-        alert("Não foi possível enviar.");
-        btn.classList.remove('loading');
-        btn.disabled = false;
-      }
-    }
+
+    input.value = '';
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    btn.style.background = '#1da851';
+    setTimeout(() => { btn.style.background = ''; }, 500);
+
+    await loadChatMessages();
+  } catch (e) {
+    alert("Não foi possível enviar.");
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
 
 function getChatUserId() {
   let userId = localStorage.getItem("chatUserId");
