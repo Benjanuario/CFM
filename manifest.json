@@ -1,14 +1,20 @@
 {
-  "name": "CFM Atualizações - Comboio Beira-Moatize",
-  "short_name": "CFM Atualizações",
-  "description": "Sistema de atualizações em tempo real do comboio de passageiros Beira-Moatize",
+  "name": "CFM Actualizações - Comboio Beira-Moatize",
+  "short_name": "CFM Actualizações",
+  "description": "Sistema de actualizações em tempo real do comboio de passageiros Beira-Moatize",
   "start_url": "./",
+  "scope": "./",
+  
   "display": "standalone",
-  "background_color": "#0d47a1",
-  "theme_color": "#0d47a1",
-  "orientation": "portrait",
-  "categories": ["transportation", "productivity"],
+  "display_override": ["window-controls-overlay", "minimal-ui"],
+  
+  "background_color": "#4CAF50",  // Verde CFM
+  "theme_color": "#4CAF50",       // Verde CFM
+  
+  "orientation": "portrait-primary",
+  "categories": ["transportation", "productivity", "travel"],
   "lang": "pt-MZ",
+  "dir": "ltr",
   
   "icons": [
     {
@@ -44,6 +50,12 @@
     {
       "src": "./icon-192.png",
       "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-256.png",
+      "sizes": "256x256",
       "type": "image/png",
       "purpose": "any maskable"
     },
@@ -92,6 +104,13 @@
       "description": "Conversar com outros passageiros",
       "url": "./#chat",
       "icons": [{ "src": "./chat-icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Mapa do Trajeto",
+      "short_name": "Mapa",
+      "description": "Visualizar rota do comboio",
+      "url": "./#mapa",
+      "icons": [{ "src": "./map-icon-96.png", "sizes": "96x96" }]
     }
   ],
   
@@ -102,6 +121,40 @@
       "title": "name",
       "text": "description",
       "url": "link"
+    },
+    "enctype": "application/x-www-form-urlencoded"
+  },
+  
+  "protocol_handlers": [
+    {
+      "protocol": "web+cfm",
+      "url": "./?route=%s"
     }
-  }
+  ],
+  
+  // Configurações específicas para iOS
+  "apple": {
+    "status_bar_style": "black-translucent",
+    "prefer_related_applications": false,
+    "capable": "yes"
+  },
+  
+  // Configurações específicas para Windows
+  "microsoft": {
+    "tileColor": "#4CAF50"
+  },
+  
+  // App relacionado (se houver)
+  "related_applications": [
+    {
+      "platform": "play",
+      "id": "com.cfm.moz.atualizacoes",
+      "url": "https://play.google.com/store/apps/details?id=com.cfm.moz.atualizacoes"
+    }
+  ],
+  
+  "prefer_related_applications": false,
+  
+  // Splash screen customizada
+  "splash_pages": null
 }
