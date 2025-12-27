@@ -1,100 +1,61 @@
 {
-  "name": "CFM Actualizações - Comboio Beira-Moatize",
-  "short_name": "CFM Actualizações",
+  "name": "CFM Actualizações - Comboio Beira / Moatize",
+  "short_name": "CFM Atualizações",
   "description": "Sistema de actualizações em tempo real do comboio de passageiros Beira-Moatize",
   "start_url": "./",
   "scope": "./",
   
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "minimal-ui"],
+  "background_color": "#4CAF50",
+  "theme_color": "#4CAF50",
   
-  "background_color": "#4CAF50",  // Verde CFM
-  "theme_color": "#4CAF50",       // Verde CFM
-  
-  "orientation": "portrait-primary",
-  "categories": ["transportation", "productivity", "travel"],
+  "orientation": "portrait",
+  "categories": ["transportation", "productivity"],
   "lang": "pt-MZ",
-  "dir": "ltr",
   
   "icons": [
     {
       "src": "./icon-72.png",
       "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
       "src": "./icon-96.png",
       "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
       "src": "./icon-128.png",
       "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
       "src": "./icon-144.png",
       "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./icon-152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
       "src": "./icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./icon-256.png",
-      "sizes": "256x256",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
       "src": "./icon-384.png",
       "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
       "src": "./icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  
-  "screenshots": [
-    {
-      "src": "./screenshot1.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Tela principal com atualizações"
-    },
-    {
-      "src": "./screenshot2.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Chat dos passageiros"
+      "type": "image/png"
     }
   ],
   
   "shortcuts": [
     {
-      "name": "Ver Atualizações",
-      "short_name": "Atualizações",
-      "description": "Ver últimas atualizações do comboio",
+      "name": "Ver Actualizações",
+      "short_name": "Actualizações",
+      "description": "Ver últimas actualizações do comboio",
       "url": "./",
       "icons": [{ "src": "./icon-96.png", "sizes": "96x96" }]
     },
@@ -103,58 +64,7 @@
       "short_name": "Chat",
       "description": "Conversar com outros passageiros",
       "url": "./#chat",
-      "icons": [{ "src": "./chat-icon-96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Mapa do Trajeto",
-      "short_name": "Mapa",
-      "description": "Visualizar rota do comboio",
-      "url": "./#mapa",
-      "icons": [{ "src": "./map-icon-96.png", "sizes": "96x96" }]
+      "icons": [{ "src": "./icon-96.png", "sizes": "96x96" }]
     }
-  ],
-  
-  "share_target": {
-    "action": "./",
-    "method": "GET",
-    "params": {
-      "title": "name",
-      "text": "description",
-      "url": "link"
-    },
-    "enctype": "application/x-www-form-urlencoded"
-  },
-  
-  "protocol_handlers": [
-    {
-      "protocol": "web+cfm",
-      "url": "./?route=%s"
+  ]
     }
-  ],
-  
-  // Configurações específicas para iOS
-  "apple": {
-    "status_bar_style": "black-translucent",
-    "prefer_related_applications": false,
-    "capable": "yes"
-  },
-  
-  // Configurações específicas para Windows
-  "microsoft": {
-    "tileColor": "#4CAF50"
-  },
-  
-  // App relacionado (se houver)
-  "related_applications": [
-    {
-      "platform": "play",
-      "id": "com.cfm.moz.atualizacoes",
-      "url": "https://play.google.com/store/apps/details?id=com.cfm.moz.atualizacoes"
-    }
-  ],
-  
-  "prefer_related_applications": false,
-  
-  // Splash screen customizada
-  "splash_pages": null
-}
